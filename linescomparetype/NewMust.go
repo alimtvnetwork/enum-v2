@@ -1,0 +1,26 @@
+package linescomparetype
+
+import "gitlab.com/auk-go/core/errcore"
+
+// NewMust
+//
+//	Creates string to the type Variant
+//
+// Mapping (using @nameToVariant):
+//   - "":    Invalid,
+//   - "-1":  Invalid,
+//   - "ask": Ask,
+//   - "*":   Ask,
+//   - "yes": On,
+//   - "1":   On,
+//   - "y":   On,
+//   - "n":   Off,
+//   - "no":  Off,
+//   - "Off":  Off,
+//   - "0":   Off,
+func NewMust(name string) Variant {
+	newType, err := New(name)
+	errcore.HandleErr(err)
+
+	return newType
+}

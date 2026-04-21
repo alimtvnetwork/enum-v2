@@ -1,0 +1,17 @@
+package quotes
+
+import (
+	"gitlab.com/auk-go/core/constants"
+)
+
+// Assumption here, both quotations exist and s it is not empty
+func unWrapBoth(s string) string {
+	length := len(s)
+
+	if length <= 2 {
+		// both are quotes only
+		return constants.EmptyString
+	}
+
+	return s[1 : length-2]
+}

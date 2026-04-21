@@ -1,0 +1,39 @@
+package logtype
+
+import (
+	"gitlab.com/auk-go/core/coredata/coredynamic"
+	"gitlab.com/auk-go/core/coreimpl/enumimpl"
+)
+
+var (
+	Ranges = [...]string{
+		Silent:  "Silent",
+		Success: "Success",
+		Info:    "Info",
+		Trace:   "Trace",
+		Debug:   "Debug",
+		Warning: "Warning",
+		Error:   "Error",
+		Fatal:   "Fatal",
+		Panic:   "Panic",
+		Custom:  "Custom",
+		File:    "File",
+		Pattern: "Pattern",
+		Invalid: "Invalid",
+	}
+
+	TraceMap = map[Variant]bool{
+		Trace: true,
+		Debug: true,
+	}
+
+	ErrorMap = map[Variant]bool{
+		Error: true,
+		Fatal: true,
+		Panic: true,
+	}
+
+	BasicEnumImpl = enumimpl.New.BasicByte.UsingTypeSlice(
+		coredynamic.TypeName(Trace),
+		Ranges[:])
+)

@@ -1,0 +1,13 @@
+package scripttype
+
+import "gitlab.com/auk-go/core/errcore"
+
+// NewMust
+//
+//	Creates string to the type Variant
+func NewMust(name string) Variant {
+	newType, err := New(name)
+	errcore.HandleErr(err)
+
+	return newType
+}

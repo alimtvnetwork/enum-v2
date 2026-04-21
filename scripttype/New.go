@@ -1,0 +1,15 @@
+package scripttype
+
+// New
+//
+//  Creates string to the type Variant
+func New(name string) (Variant, error) {
+	val, err := BasicEnumImpl.GetValueByName(
+		name)
+
+	if err != nil {
+		return Invalid, err
+	}
+
+	return Variant(val), nil
+}

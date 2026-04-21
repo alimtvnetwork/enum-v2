@@ -1,0 +1,78 @@
+package crontabscmdnames
+
+import (
+	"gitlab.com/auk-go/core/coredata/coredynamic"
+	"gitlab.com/auk-go/core/coreimpl/enumimpl"
+)
+
+var (
+	Ranges = [...]string{
+		Invalid:                 "Invalid",
+		Help:                    "Help",
+		Log:                     "Log",
+		Status:                  "Status",
+		Install:                 "Install",
+		InstallFix:              "InstallFix",
+		Schedule:                "Schedule",
+		SchedulePersonal:        "SchedulePersonal",
+		ScheduleBefore:          "ScheduleBefore",
+		ScheduleAfter:           "ScheduleAfter",
+		SchedulePersonalBefore:  "SchedulePersonalBefore",
+		SchedulePersonalAfter:   "SchedulePersonalAfter",
+		ScheduleEveryMinute:     "ScheduleEveryMinute",
+		ScheduleEverySecond:     "ScheduleEverySecond",
+		ScheduleEveryHour:       "ScheduleEveryHour",
+		ScheduleEveryday:        "ScheduleEveryday",
+		ScheduleWeekly:          "ScheduleWeekly",
+		ScheduleMonthly:         "ScheduleMonthly",
+		ScheduleYearly:          "ScheduleYearly",
+		ScheduleUpdate:          "ScheduleUpdate",
+		ScheduleRemove:          "ScheduleRemove",
+		ScheduleBash:            "ScheduleBash",
+		ScheduleTask:            "ScheduleTask",
+		RemoveAllSchedule:       "RemoveAllSchedule",
+		UserSchedule:            "UserSchedule",
+		UserScheduleEveryMinute: "UserScheduleEveryMinute",
+		UserScheduleEverySecond: "UserScheduleEverySecond",
+		UserScheduleEveryHour:   "UserScheduleEveryHour",
+		UserScheduleEveryday:    "UserScheduleEveryday",
+		UserScheduleWeekly:      "UserScheduleWeekly",
+		UserScheduleMonthly:     "UserScheduleMonthly",
+		UserScheduleYearly:      "UserScheduleYearly",
+		UserScheduleUpdate:      "UserScheduleUpdate",
+		UserScheduleRemove:      "UserScheduleRemove",
+		UserScheduleBash:        "UserScheduleBash",
+		UserScheduleTask:        "UserScheduleTask",
+		UserRemoveAllSchedule:   "UserRemoveAllSchedule",
+		EveryRebootSchedule:     "EveryRebootSchedule",
+		RebootScheduleOnce:      "RebootScheduleOnce",
+		EveryShutdownSchedule:   "EveryShutdownSchedule",
+		EveryStartupSchedule:    "EveryStartupSchedule",
+		StartupScheduleOnce:     "StartupScheduleOnce",
+		EveryHour:               "EveryHour",
+		EveryDay:                "EveryDay",
+		EveryMonth:              "EveryMonth",
+		EveryYear:               "EveryYear",
+		Clear:                   "Clear",
+		RemoveAll:               "RemoveAll",
+		LastStates:              "LastStates",
+		Sync:                    "Sync",
+		SyncNow:                 "SyncNow",
+		SyncForce:               "SyncForce",
+		CurrentStateName:        "CurrentStateName",
+		StateDiff:               "StateDiff",
+		StateHistories:          "StateHistories",
+		Export:                  "Export",
+		DumpJson:                "DumpJson",
+		ImportJson:              "ImportJson",
+		Histories:               "Histories",
+		List:                    "List",
+		ListJson:                "ListJson",
+		Backup:                  "Backup",
+		Import:                  "Import",
+	}
+
+	BasicEnumImpl = enumimpl.New.BasicByte.UsingTypeSlice(
+		coredynamic.TypeName(Invalid),
+		Ranges[:])
+)
