@@ -1,6 +1,6 @@
 package instructiontype
 
-import "github.com/alimtvnetwork/core-v8/errcore"
+import "github.com/alimtvnetwork/core-v9/errcore"
 
 func NewMust(name string) Variant {
 	newType, err := New(name)

@@ -1,7 +1,7 @@
 package quotes
 
 import (
-	"github.com/alimtvnetwork/core-v8/constants"
+	"github.com/alimtvnetwork/core-v9/constants"
 )
 
 // Assumption here, s has single quotes and s it is not empty

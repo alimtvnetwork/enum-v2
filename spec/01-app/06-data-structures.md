@@ -50,7 +50,7 @@ Slice-backed collection with embedded `sync.Mutex`.
 #### Construction
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/coregeneric"
+import "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
 
 // Via the New struct-as-namespace
 col := coregeneric.New.Collection.String.Cap(10)
@@ -174,7 +174,7 @@ Lower-volume containers; same construction pattern via `coregeneric.New.LinkedLi
 Located at `coredata/corestr/`. String-typed collection with batteries included for the most common case: a thread-safe list of strings.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/corestr"
+import "github.com/alimtvnetwork/core-v9/coredata/corestr"
 
 collection := corestr.NewCollectionPtrUsingStrings(&values, 0)
 collection.AddsLock("new item")
@@ -198,7 +198,7 @@ When to prefer `corestr.Collection` over `coregeneric.Collection[string]`:
 Located at `coredata/corejson/`. The single canonical entry point for JSON in the framework.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/corejson"
+import "github.com/alimtvnetwork/core-v9/coredata/corejson"
 
 // Serialize
 jsonStr,   err := corejson.Serialize.ToString(myStruct)
@@ -229,7 +229,7 @@ Any package that touches JSON should import `corejson` and **never** `encoding/j
 Located at `coredata/coreonce/`. Lazy-evaluated cached values for all common types — read-modify-once semantics built on `sync.Once`.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/coreonce"
+import "github.com/alimtvnetwork/core-v9/coredata/coreonce"
 
 // Construct with the producer
 once := coreonce.New.String(func() string { return expensiveCall() })
@@ -248,7 +248,7 @@ Use for expensive package-level computations (regex compilation, file reads, net
 Located at `coredata/corepayload/`. Wire-format envelope for payload-bearing messages.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/corepayload"
+import "github.com/alimtvnetwork/core-v9/coredata/corepayload"
 
 // Empty placeholder
 payload := corepayload.New.PayloadWrapper.Empty()

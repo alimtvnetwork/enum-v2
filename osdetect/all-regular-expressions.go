@@ -1,7 +1,7 @@
 package osdetect
 
 import (
-	"github.com/alimtvnetwork/core-v8/regexnew"
+	"github.com/alimtvnetwork/core-v9/regexnew"
 )
 
 var (

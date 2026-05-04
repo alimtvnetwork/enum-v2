@@ -1,10 +1,10 @@
 package promptclitype
 
 import (
-	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-	"github.com/alimtvnetwork/core-v8/errcore"
-	"github.com/alimtvnetwork/core-v8/issetter"
+	"github.com/alimtvnetwork/core-v9/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v9/errcore"
+	"github.com/alimtvnetwork/core-v9/issetter"
 	"github.com/alimtvnetwork/enum-v1/onofftype"
 )
 

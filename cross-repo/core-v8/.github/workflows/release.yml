@@ -136,12 +136,12 @@ jobs:
             echo "| Commit  | \`${GITHUB_SHA:0:10}\` |"
             echo "| Ref     | \`${GITHUB_REF}\` |"
             echo "| Build Date | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |"
-            echo "| Module | \`github.com/alimtvnetwork/core-v8\` |"
+            echo "| Module | \`github.com/alimtvnetwork/core-v9\` |"
             echo ""
             echo "### Install"
             echo ""
             echo '```bash'
-            echo "go get github.com/alimtvnetwork/core-v8@${VERSION}"
+            echo "go get github.com/alimtvnetwork/core-v9@${VERSION}"
             echo '```'
             echo ""
             echo "### Checksums (SHA256)"

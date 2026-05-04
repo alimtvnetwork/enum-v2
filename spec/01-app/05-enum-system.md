@@ -141,8 +141,8 @@ Define the human-readable name slice and instantiate the impl.
 package status
 
 import (
-    "github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-    "github.com/alimtvnetwork/core-v8/internal/reflectinternal"
+    "github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+    "github.com/alimtvnetwork/core-v9/internal/reflectinternal"
 )
 
 var (
@@ -170,7 +170,7 @@ All methods below are required to satisfy `StandardEnumer` + the type-specific `
 ```go
 package status
 
-import "github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
+import "github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
 
 // --- Value accessors (BasicEnumValuer) — ALL required by enuminf.BasicEnumValuer ---
 // DO NOT remove any of these even if they seem redundant; the interface needs them all.

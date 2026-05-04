@@ -1,8 +1,8 @@
 package creationtests
 
 import (
-	"github.com/alimtvnetwork/core-v8/coredata/corerange"
-	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v9/coredata/corerange"
+	"github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
 )
 
 type EnumTestWrapper struct {

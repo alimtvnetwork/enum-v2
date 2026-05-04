@@ -1,10 +1,10 @@
 package osdetect
 
 import (
-	"github.com/alimtvnetwork/core-v8/corecomparator"
-	"github.com/alimtvnetwork/core-v8/coredata/corejson"
-	"github.com/alimtvnetwork/core-v8/coreversion"
-	"github.com/alimtvnetwork/core-v8/ostype"
+	"github.com/alimtvnetwork/core-v9/corecomparator"
+	"github.com/alimtvnetwork/core-v9/coredata/corejson"
+	"github.com/alimtvnetwork/core-v9/coreversion"
+	"github.com/alimtvnetwork/core-v9/ostype"
 	"github.com/alimtvnetwork/enum-v1/linuxvendortype"
 	"github.com/alimtvnetwork/enum-v1/osarchs"
 	"github.com/alimtvnetwork/enum-v1/strtype"

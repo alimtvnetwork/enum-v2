@@ -1,7 +1,7 @@
 package brackets
 
 import (
-	"github.com/alimtvnetwork/core-v8/constants"
+	"github.com/alimtvnetwork/core-v9/constants"
 )
 
 // Assumption here, both brackets exists and s it is not empty

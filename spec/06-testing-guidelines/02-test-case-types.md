@@ -209,7 +209,7 @@ A package-level `testWrapper` is a **type alias** to a shared wrapper under `tes
 // testWrapper.go
 package anycmptests
 
-import "github.com/alimtvnetwork/core-v8/tests/testwrappers/stringstestwrapper"
+import "github.com/alimtvnetwork/core-v9/tests/testwrappers/stringstestwrapper"
 
 type testWrapper = stringstestwrapper.StringsTestWrapper
 ```
@@ -249,7 +249,7 @@ This is **idiomatic Style B**, not a code smell. Do not refactor it away.
 // testWrapper.go
 package anycmptests
 
-import "github.com/alimtvnetwork/core-v8/tests/testwrappers/stringstestwrapper"
+import "github.com/alimtvnetwork/core-v9/tests/testwrappers/stringstestwrapper"
 
 type testWrapper = stringstestwrapper.StringsTestWrapper
 ```
@@ -261,9 +261,9 @@ package anycmptests
 import (
     "reflect"
 
-    "github.com/alimtvnetwork/core-v8/coretests"
-    "github.com/alimtvnetwork/core-v8/coretests/args"
-    "github.com/alimtvnetwork/core-v8/issetter"
+    "github.com/alimtvnetwork/core-v9/coretests"
+    "github.com/alimtvnetwork/core-v9/coretests/args"
+    "github.com/alimtvnetwork/core-v9/issetter"
 )
 
 var (

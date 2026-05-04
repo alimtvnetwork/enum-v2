@@ -41,7 +41,7 @@ Located at `coredynamic/`. Provides safe dynamic dispatch over arbitrary `any` v
 ### 2.1 Dynamic method invocation
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredynamic"
+import "github.com/alimtvnetwork/core-v9/coredynamic"
 
 // Call a method by name with positional args.
 // Signature: InvokeMethod(target any, name string, args ...any) (any, error)
@@ -85,7 +85,7 @@ Located at `reflectcore/`. Stateless predicates and structural helpers — never
 ### 3.1 Kind predicates
 
 ```go
-import "github.com/alimtvnetwork/core-v8/reflectcore"
+import "github.com/alimtvnetwork/core-v9/reflectcore"
 
 reflectcore.IsPointer(val)
 reflectcore.IsStruct(val)

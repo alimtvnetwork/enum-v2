@@ -5,15 +5,15 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/alimtvnetwork/core-v8/constants"
-	"github.com/alimtvnetwork/core-v8/converters"
-	"github.com/alimtvnetwork/core-v8/corecomparator"
-	"github.com/alimtvnetwork/core-v8/corecsv"
-	"github.com/alimtvnetwork/core-v8/coredata/corerange"
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl/enumtype"
-	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
-	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v9/constants"
+	"github.com/alimtvnetwork/core-v9/converters"
+	"github.com/alimtvnetwork/core-v9/corecomparator"
+	"github.com/alimtvnetwork/core-v9/corecsv"
+	"github.com/alimtvnetwork/core-v9/coredata/corerange"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl/enumtype"
+	"github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v9/errcore"
 )
 
 type Variant int

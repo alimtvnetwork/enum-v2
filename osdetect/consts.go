@@ -1,8 +1,8 @@
 package osdetect
 
 import (
-	"github.com/alimtvnetwork/core-v8/constants/regkeysconsts"
-	"github.com/alimtvnetwork/core-v8/filemode"
+	"github.com/alimtvnetwork/core-v9/constants/regkeysconsts"
+	"github.com/alimtvnetwork/core-v9/filemode"
 )
 
 const (

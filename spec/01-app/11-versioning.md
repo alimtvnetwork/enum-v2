@@ -22,7 +22,7 @@
 Located at `coreversion/`. Provides typed semver primitives — parse, compare, and constrain Go module versions.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coreversion"
+import "github.com/alimtvnetwork/core-v9/coreversion"
 
 // Parse
 v, err := coreversion.Parse("v1.2.3")
@@ -52,7 +52,7 @@ v.String() // "v1.2.3"
 Located at `versionindexes/`. Stable integer indices that identify "version eras" without relying on string comparison.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/versionindexes"
+import "github.com/alimtvnetwork/core-v9/versionindexes"
 
 versionindexes.V1   // 1
 versionindexes.V2   // 2
@@ -102,7 +102,7 @@ versionindexes.V8   // 8 (current era — core-v8)
 
 ### Within an era (e.g. `core-v8.x.y`)
 
-- **Public APIs are stable**: imports from `github.com/alimtvnetwork/core-v8/<pkg>` will not break.
+- **Public APIs are stable**: imports from `github.com/alimtvnetwork/core-v9/<pkg>` will not break.
 - **`internal/` packages are not stable**: they may change in any minor release.
 - **Error categories** (`errcore.*Type`) are stable; new categories may be added (additive, non-breaking).
 - **Diagnostic message formats** are stable when consumed by tests in `tests/integratedtests/` (see [`08-validators.md` §5](./08-validators.md#5-diagnostic-output-contract)).

@@ -23,7 +23,7 @@ Located at `converters/`. Provides struct-as-namespace converters for the most c
 ### 1.1 `StringTo`
 
 ```go
-import "github.com/alimtvnetwork/core-v8/converters"
+import "github.com/alimtvnetwork/core-v9/converters"
 
 // String → integer (returns error)
 val, err := converters.StringTo.Integer("42")
@@ -70,7 +70,7 @@ prettyStr := converters.PrettyJson.FromAny(myStruct)
 Located at `typesconv/`. Lower-level companion to `converters` — used when you need to convert **between two non-string types** (e.g. `int` → `int64`, `float64` → `int`) with explicit overflow / precision-loss handling.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/typesconv"
+import "github.com/alimtvnetwork/core-v9/typesconv"
 
 // Numeric widening (always safe)
 i64 := typesconv.IntToInt64(myInt)

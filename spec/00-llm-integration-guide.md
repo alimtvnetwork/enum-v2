@@ -1,4 +1,4 @@
-# LLM Integration Guide — `github.com/alimtvnetwork/core-v8`
+# LLM Integration Guide — `github.com/alimtvnetwork/core-v9`
 
 > **Purpose**: A single-file reference for any LLM or AI agent that needs to understand, use, or extend this Go utility framework. Read this before writing any code that imports `core`.
 
@@ -83,21 +83,21 @@ The codebase has **four equally-supported test styles**. Pick by data shape, not
 ## Module Identity
 
 ```
-module github.com/alimtvnetwork/core-v8
+module github.com/alimtvnetwork/core-v9
 go 1.25.0
 ```
 
 > ⚠️ **Package name vs. module path** *(F-NEW-04 fix)*
 > The module path ends in `core-v8`, but the **root package name in Go code is `core`**, not `corev8`.
 > ```go
-> import "github.com/alimtvnetwork/core-v8"   // module path
+> import "github.com/alimtvnetwork/core-v9"   // module path
 > // ↓ used in code as ↓
 > core.EmptySlice[int]()                       // package name = "core"
 > ```
 > See [`spec/01-app/03-import-conventions.md`](./01-app/03-import-conventions.md) for the full rule.
 
 - **Zero external runtime dependencies** — only `github.com/smarty/assertions` and `github.com/smartystreets/goconvey` for testing.
-- Install: `go get github.com/alimtvnetwork/core-v8`
+- Install: `go get github.com/alimtvnetwork/core-v9`
 
 ---
 
@@ -194,20 +194,20 @@ core/
 ```go
 import (
     // Root package
-    "github.com/alimtvnetwork/core-v8"
+    "github.com/alimtvnetwork/core-v9"
 
     // Sub-packages — use full path
-    "github.com/alimtvnetwork/core-v8/conditional"
-    "github.com/alimtvnetwork/core-v8/constants"
-    "github.com/alimtvnetwork/core-v8/converters"
-    "github.com/alimtvnetwork/core-v8/errcore"
-    "github.com/alimtvnetwork/core-v8/coredata/corejson"
-    "github.com/alimtvnetwork/core-v8/coredata/corestr"
-    "github.com/alimtvnetwork/core-v8/coredata/coregeneric"
-    "github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
-    "github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-    "github.com/alimtvnetwork/core-v8/isany"
-    "github.com/alimtvnetwork/core-v8/issetter"
+    "github.com/alimtvnetwork/core-v9/conditional"
+    "github.com/alimtvnetwork/core-v9/constants"
+    "github.com/alimtvnetwork/core-v9/converters"
+    "github.com/alimtvnetwork/core-v9/errcore"
+    "github.com/alimtvnetwork/core-v9/coredata/corejson"
+    "github.com/alimtvnetwork/core-v9/coredata/corestr"
+    "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
+    "github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
+    "github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+    "github.com/alimtvnetwork/core-v9/isany"
+    "github.com/alimtvnetwork/core-v9/issetter"
 )
 ```
 
@@ -494,8 +494,8 @@ const (
 package status
 
 import (
-    "github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-    "github.com/alimtvnetwork/core-v8/internal/reflectinternal"
+    "github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+    "github.com/alimtvnetwork/core-v9/internal/reflectinternal"
 )
 
 var (
@@ -518,7 +518,7 @@ var (
 ```go
 package status
 
-import "github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
+import "github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
 
 // Value accessors (BasicEnumValuer) — ALL required
 func (it Status) Value() byte         { return byte(it) }
@@ -638,7 +638,7 @@ func (it Status) IsFailed() bool  { return it == Failed }
 ### JSON Pipeline
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/corejson"
+import "github.com/alimtvnetwork/core-v9/coredata/corejson"
 
 // Serialize
 jsonStr, err := corejson.Serialize.ToString(myStruct)
@@ -655,7 +655,7 @@ pretty := corejson.NewPtr(myStruct).PrettyJsonString()
 ### String Collections
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/corestr"
+import "github.com/alimtvnetwork/core-v9/coredata/corestr"
 
 collection := corestr.NewCollectionPtrUsingStrings(&values, 0)
 collection.AddsLock("new item")  // thread-safe add
@@ -665,7 +665,7 @@ fmt.Println(collection.Length())
 ### Generic Collections
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/coregeneric"
+import "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
 
 // Hashset, Hashmap, Collection[T], LinkedList[T], SimpleSlice[T]
 ```
@@ -673,14 +673,14 @@ import "github.com/alimtvnetwork/core-v8/coredata/coregeneric"
 ### Compute-Once Values
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/coreonce"
+import "github.com/alimtvnetwork/core-v9/coredata/coreonce"
 // Lazy-evaluated cached values for all common types
 ```
 
 ### PayloadWrapper
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coredata/corepayload"
+import "github.com/alimtvnetwork/core-v9/coredata/corepayload"
 
 payload := corepayload.New.PayloadWrapper.Empty()
 payload = corepayload.New.PayloadWrapper.UsingInstruction(&corepayload.PayloadCreateInstruction{
@@ -695,7 +695,7 @@ payload = corepayload.New.PayloadWrapper.UsingInstruction(&corepayload.PayloadCr
 ## converters — Type Conversions
 
 ```go
-import "github.com/alimtvnetwork/core-v8/converters"
+import "github.com/alimtvnetwork/core-v9/converters"
 
 // String → integer
 val, err := converters.StringTo.Integer("42")
@@ -721,7 +721,7 @@ prettyStr := converters.PrettyJson.String(jsonBytes)
 ### isany — Type Predicates
 
 ```go
-import "github.com/alimtvnetwork/core-v8/isany"
+import "github.com/alimtvnetwork/core-v9/isany"
 
 isany.Null(val)              // true if nil
 isany.Defined(val)           // true if non-nil
@@ -733,7 +733,7 @@ isany.JsonEqual(a, b)        // compare via JSON serialization
 ### issetter — 6-Valued Boolean
 
 ```go
-import "github.com/alimtvnetwork/core-v8/issetter"
+import "github.com/alimtvnetwork/core-v9/issetter"
 
 // 6 states: Uninitialized(0), True(1), False(2), Unset(3), Set(4), Wildcard(5)
 status := issetter.True
@@ -745,7 +745,7 @@ status.HasInitialized()    // true
 ### regexnew — Lazy Compiled Regex
 
 ```go
-import "github.com/alimtvnetwork/core-v8/regexnew"
+import "github.com/alimtvnetwork/core-v9/regexnew"
 
 // Package-level (no lock needed at init)
 var digitRegex = regexnew.New.Lazy(`\d+`)
@@ -764,7 +764,7 @@ lazy.IsMatch(input)
 
 ```go
 // ❌ Don't (in new code)
-import "github.com/alimtvnetwork/core-v8/coremath"
+import "github.com/alimtvnetwork/core-v9/coremath"
 v := coremath.MaxByte(a, b)
 
 // ✅ Do
@@ -774,14 +774,14 @@ v := max(a, b)   // built-in, works for any cmp.Ordered
 ### corecmp — Typed Comparisons
 
 ```go
-import "github.com/alimtvnetwork/core-v8/corecmp"
+import "github.com/alimtvnetwork/core-v9/corecmp"
 // Byte, Integer, Integer8/16/32/64, String, Time comparisons + pointer variants
 ```
 
 ### coresort — Sorting
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coresort/strsort"
+import "github.com/alimtvnetwork/core-v9/coresort/strsort"
 
 fruits := []string{"banana", "mango", "apple"}
 strsort.Quick(&fruits)    // [apple banana mango]
@@ -795,7 +795,7 @@ Line, slice, text, and range validators with assertion capabilities.
 ### corefuncs — Function Wrappers
 
 ```go
-import "github.com/alimtvnetwork/core-v8/corefuncs"
+import "github.com/alimtvnetwork/core-v9/corefuncs"
 // GetFuncName, GetFuncFullName — for debug/error reporting
 // ActionReturnsErrorFuncWrapper, InOutErrFuncWrapper, etc.
 ```
@@ -803,14 +803,14 @@ import "github.com/alimtvnetwork/core-v8/corefuncs"
 ### namevalue — Name-Value Pairs
 
 ```go
-import "github.com/alimtvnetwork/core-v8/namevalue"
+import "github.com/alimtvnetwork/core-v9/namevalue"
 // Instance (single pair), Collection (multiple pairs)
 ```
 
 ### keymk — Key Compilation
 
 ```go
-import "github.com/alimtvnetwork/core-v8/keymk"
+import "github.com/alimtvnetwork/core-v9/keymk"
 // Template-based key builders with legends and placeholders
 ```
 
@@ -2072,7 +2072,7 @@ All `All()` / `Values()` / `Keys()` methods on `Collection[T]`, `SimpleSlice[T]`
 ```go
 import (
     "iter"
-    "github.com/alimtvnetwork/core-v8/coredata/coregeneric"
+    "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
 )
 
 // Compile-ready signatures (returned from each container)

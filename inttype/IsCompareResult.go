@@ -1,7 +1,7 @@
 package inttype
 
 import (
-	"github.com/alimtvnetwork/core-v8/corecomparator"
+	"github.com/alimtvnetwork/core-v9/corecomparator"
 	"github.com/alimtvnetwork/enum-v1/internal/messages"
 )
 

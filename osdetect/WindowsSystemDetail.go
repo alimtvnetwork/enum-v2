@@ -3,7 +3,7 @@ package osdetect
 import (
 	"fmt"
 	
-	"github.com/alimtvnetwork/core-v8/coreversion"
+	"github.com/alimtvnetwork/core-v9/coreversion"
 	"github.com/alimtvnetwork/enum-v1/inttype"
 	"github.com/alimtvnetwork/enum-v1/strtype"
 )

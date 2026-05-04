@@ -23,7 +23,7 @@ This is an outstanding specification, clearly the product of rigorous, iterative
 - **Impact:** Agent will be confused whether to use the modern, built-in Go `max()` function or the library's `coremath.Max()` function. It may use the obsolete library helper or refuse to proceed due to conflicting instructions.
 - **Evidence:**
     - `spec/01-app/00-repo-overview.md`: `go 1.25.0`
-    - `spec/00-llm-integration-guide.md`: `import "github.com/alimtvnetwork/core-v8/coremath" // Min/Max for all numeric types`
+    - `spec/00-llm-integration-guide.md`: `import "github.com/alimtvnetwork/core-v9/coremath" // Min/Max for all numeric types`
     - `spec/00-llm-integration-guide.md`: `// Deprecated: Use the built-in max() function (Go 1.21+).`
 - **Why it can fail:** The spec simultaneously declares the Go version as 1.25 (where `max()` is available), documents `coremath` as a primary utility package, and shows an example of deprecating a helper in favor of the built-in `max()`. An AI has no way to resolve this: is `coremath` deprecated or not? Why does it still exist and appear in the main guide if the Go version makes it obsolete?
 - **Recommended fix:** Remove `coremath` from the primary utility package list in `00-llm-integration-guide.md`. Move it to a "Legacy/Deprecated Packages" section with a clear statement: "These packages are maintained for backward compatibility but MUST NOT be used in new code. Use the equivalent Go 1.21+ built-in functions (`min`, `max`, `clear`) instead."
@@ -52,7 +52,7 @@ This is an outstanding specification, clearly the product of rigorous, iterative
 - **Severity:** medium
 - **Impact:** Agent may incorrectly try to use `corev8` as the package name in code (e.g. `corev8.EmptySlice()`), leading to compile errors.
 - **Evidence:** `spec/01-app/03-import-conventions.md`: `The package name is core, not corev8. Even though the path ends in core-v8, Go uses the package core declaration...`
-- **Why it can fail:** This critical clarification is buried deep within `03-import-conventions.md`. The primary `Module Identity` section in `00-llm-integration-guide.md` and `01-app/00-repo-overview.md` states the module path is `github.com/alimtvnetwork/core-v8` but does *not* immediately warn the user that the package name is simply `core`. A naive agent will assume the package name matches the last path segment.
+- **Why it can fail:** This critical clarification is buried deep within `03-import-conventions.md`. The primary `Module Identity` section in `00-llm-integration-guide.md` and `01-app/00-repo-overview.md` states the module path is `github.com/alimtvnetwork/core-v9` but does *not* immediately warn the user that the package name is simply `core`. A naive agent will assume the package name matches the last path segment.
 - **Recommended fix:** Elevate the warning. In both `00-llm-integration-guide.md` and `01-app/00-repo-overview.md`, immediately under the `Module Identity` code block, add a prominent `> **Note**: The module path is `core-v8`, but the root package name to use in code is `core`.`
 - **Effort:** S
 - **Score uplift if fixed:** +1.0 point

@@ -1,7 +1,7 @@
 package sshcmdnames
 
 import (
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
 )
 
 var (

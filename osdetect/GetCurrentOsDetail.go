@@ -1,8 +1,8 @@
 package osdetect
 
 import (
-	"github.com/alimtvnetwork/core-v8/codestack"
-	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v9/codestack"
+	"github.com/alimtvnetwork/core-v9/errcore"
 )
 
 func GetCurrentOsDetail() (*OperatingSystemDetail, error) {

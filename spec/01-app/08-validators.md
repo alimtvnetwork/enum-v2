@@ -69,7 +69,7 @@ This is the **`IsSuccessValidator`** composition shown in [`/spec/00-llm-integra
 Validates a single line of text against rules (length, character class, regex).
 
 ```go
-import "github.com/alimtvnetwork/core-v8/corevalidator"
+import "github.com/alimtvnetwork/core-v9/corevalidator"
 
 v := corevalidator.New.Line.
     NotEmpty().
@@ -192,8 +192,8 @@ Follow this template when no built-in validator fits.
 package emailvalidator
 
 import (
-    "github.com/alimtvnetwork/core-v8/errcore"
-    "github.com/alimtvnetwork/core-v8/regexnew"
+    "github.com/alimtvnetwork/core-v9/errcore"
+    "github.com/alimtvnetwork/core-v9/regexnew"
 )
 
 type EmailValidator struct {

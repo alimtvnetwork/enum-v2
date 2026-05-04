@@ -1,9 +1,9 @@
 package promptclitype
 
 import (
-	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
-	"github.com/alimtvnetwork/core-v8/errcore"
-	"github.com/alimtvnetwork/core-v8/issetter"
+	"github.com/alimtvnetwork/core-v9/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v9/errcore"
+	"github.com/alimtvnetwork/core-v9/issetter"
 )
 
 func NewUsingSetter(value issetter.Value) (Variant, error) {

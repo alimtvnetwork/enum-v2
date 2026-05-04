@@ -3,8 +3,8 @@ package quotes
 import (
 	"strings"
 
-	"github.com/alimtvnetwork/core-v8/converters"
-	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v9/converters"
+	"github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
 	"github.com/alimtvnetwork/enum-v1/internal/consts"
 )
 

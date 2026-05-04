@@ -1,6 +1,6 @@
 package licensetype
 
-import "github.com/alimtvnetwork/core-v8/errcore"
+import "github.com/alimtvnetwork/core-v9/errcore"
 
 func NewMust(name string) Variant {
 	exitCode, err := New(name)

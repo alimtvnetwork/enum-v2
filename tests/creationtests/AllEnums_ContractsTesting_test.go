@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v9/errcore"
 )
 
 func GenerateTestCases(t *testing.T) {

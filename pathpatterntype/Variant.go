@@ -3,12 +3,12 @@ package pathpatterntype
 import (
 	"strings"
 
-	"github.com/alimtvnetwork/core-v8/constants"
-	"github.com/alimtvnetwork/core-v8/coredata/corejson"
-	"github.com/alimtvnetwork/core-v8/coredata/stringslice"
-	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
-	"github.com/alimtvnetwork/core-v8/coreutils/stringutil"
-	"github.com/alimtvnetwork/core-v8/simplewrap"
+	"github.com/alimtvnetwork/core-v9/constants"
+	"github.com/alimtvnetwork/core-v9/coredata/corejson"
+	"github.com/alimtvnetwork/core-v9/coredata/stringslice"
+	"github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v9/coreutils/stringutil"
+	"github.com/alimtvnetwork/core-v9/simplewrap"
 )
 
 // Variant

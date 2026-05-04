@@ -3,10 +3,10 @@ package osdetect
 import (
 	"path/filepath"
 	
-	"github.com/alimtvnetwork/core-v8/chmodhelper"
-	"github.com/alimtvnetwork/core-v8/coredata/coreonce"
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v9/chmodhelper"
+	"github.com/alimtvnetwork/core-v9/coredata/coreonce"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v9/errcore"
 )
 
 var (

@@ -1,6 +1,6 @@
 package linuxservicestate
 
-import "github.com/alimtvnetwork/core-v8/constants"
+import "github.com/alimtvnetwork/core-v9/constants"
 
 func NewCode(code int) ExitCode {
 	if code >= constants.MaxUnit8AsInt || code < 0 {
