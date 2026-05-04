@@ -59,6 +59,7 @@ function Invoke-CoverageCompileCheck {
                 $combinedOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $testPkg -Lines $combinedOut
                 $callerSource = Get-CallerSource
                 Write-Fail "Blocked: $shortName  ($testPkg) (source: $callerSource)"
+                Write-BlockedDiagnostic $combinedOut
                 $blockedPkgs.Add($shortName)
                 $blockedErrors[$shortName] = ($combinedOut -join "`n")
                 Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $combinedOut
