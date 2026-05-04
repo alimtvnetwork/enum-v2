@@ -9,6 +9,22 @@
 
 ---
 
+## [spec-v0.19.0] — 2026-05-04 (Cycle 1 LOW-drift fixes applied)
+
+### Fixed
+- **`spec/01-app/03-import-conventions.md`** — applied 5 LOW-severity Cycle 1 findings:
+  - **D-CVS-01** (line 4): `consumes core-v8 packages` → `consumes core-v9 packages`.
+  - **D-CVS-02** (line 88): `path ends in core-v8` / `not corev8` → `core-v9` / `corev9`.
+  - **D-CVS-03** (line 94): `For core-v8, this means:` → `For core-v9, this means:`.
+  - **D-CVS-04** (line 121): reworded "rooted at the same `core-v8` module" to a module-generic statement that applies equally to `core-v9`, `enum-v1`, or any other consumer with its own `internal/` tree.
+  - **D-CVS-05** (lines 61, 73): annotated `coredata/coregeneric` as `// optional` in the canonical import block and added a sentence noting "not every consumer uses every package — `enum-v1`, for example, currently uses 8 of the 11 listed canonical imports".
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — moved D-CVS-01..05 from Open → Resolved; §03 score updated 41.7 → **83.3** (10/12). The two remaining `tests/integratedtests/` and `internal/reflectinternal` contradictions stay open pending a structural decision.
+
+### Verified
+- `rg -n "core-v8" spec/01-app/03-import-conventions.md` → 0 hits (clean).
+
+---
+
 ## [spec-v0.18.0] — 2026-05-04 (open code-vs-spec audit phase)
 
 ### Added

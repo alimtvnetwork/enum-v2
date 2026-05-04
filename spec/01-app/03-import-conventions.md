@@ -1,7 +1,7 @@
 # 03 — Import Conventions
 
 > ✅ **Status**: filled in audit Step 5 (2026-04-23, Asia/Kuala_Lumpur).
-> **Audience**: AI agents and contributors writing code that consumes `core-v8` packages, or extending the framework itself.
+> **Audience**: AI agents and contributors writing code that consumes `core-v9` packages, or extending the framework itself.
 > **Source**: extracted from [`/spec/00-llm-integration-guide.md`](../00-llm-integration-guide.md) §Import Conventions, §Package Map, plus `internal/` audit findings.
 
 ---
@@ -58,7 +58,7 @@ import (
     // Data structures
     "github.com/alimtvnetwork/core-v9/coredata/corejson"
     "github.com/alimtvnetwork/core-v9/coredata/corestr"
-    "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
+    "github.com/alimtvnetwork/core-v9/coredata/coregeneric" // optional — not every consumer needs this
 
     // Interfaces & implementations
     "github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
@@ -70,7 +70,7 @@ import (
 )
 ```
 
-For the full inventory of public packages, see [`01-package-map.md`](./01-package-map.md).
+For the full inventory of public packages, see [`01-package-map.md`](./01-package-map.md). Not every consumer uses every package — `enum-v1`, for example, currently uses 8 of the 11 listed canonical imports.
 
 ### Root package usage
 
@@ -85,13 +85,13 @@ func example() {
 }
 ```
 
-> The package name is `core`, not `corev8`. Even though the path ends in `core-v8`, Go uses the `package core` declaration in the source files.
+> The package name is `core`, not `corev9`. Even though the path ends in `core-v9`, Go uses the `package core` declaration in the source files.
 
 ---
 
 ## 3. The `internal/` Boundary
 
-Go's compiler enforces that `internal/` packages can only be imported from packages **rooted at the `internal/` parent**. For `core-v8`, this means:
+Go's compiler enforces that `internal/` packages can only be imported from packages **rooted at the `internal/` parent**. For `core-v9`, this means:
 
 ```
 github.com/alimtvnetwork/core-v9/internal/...
@@ -118,7 +118,7 @@ Tests under `tests/integratedtests/` legitimately import `internal/`:
 import "github.com/alimtvnetwork/core-v9/internal/reflectinternal"
 ```
 
-This works because the test module is rooted at the same `core-v8` module.
+This works because the test package is rooted in **the same Go module** as the `internal/` package it imports. The rule is generic — it applies whether the module is `core-v9`, `enum-v1`, or any other consumer that ships its own `internal/` tree.
 
 > **Rule**: If you are tempted to add a re-export wrapper "to expose an internal helper", **don't**. Either move the helper to a public package, or accept that external consumers don't need it.
 
