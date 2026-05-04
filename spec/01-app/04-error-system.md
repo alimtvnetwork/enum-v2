@@ -30,6 +30,11 @@ The `errcore` package is the canonical way to construct errors. It exposes:
 | `StackEnhance` | struct-as-namespace var | Stack-trace-aware wrapping |
 | `MergeErrors`, `ManyErrorToSingle`, `SliceToError` | functions | Combining multiple errors |
 | `HandleErr(err error)` | function | **Panic helper used exclusively by `*Must` variants.** No-op when `err == nil`; panics with a stack-enhanced wrapping when `err != nil`. **Always prefer `errcore.HandleErr(err)` over bare `panic(err)` in `*Must` methods.** *(F-V12-05)* |
+| `MustBeEmpty(err error)` | function | **Sister of `HandleErr`** used by non-`*Must` call sites that still want fail-fast semantics — typical pattern is package-internal helpers that genuinely cannot recover (e.g. `compressformats/all-validation-checking-err.go`, `dbdrivertype/connectionStringCompiler.go`). Same nil-safety: no-op if `err == nil`, panics otherwise. Pick `HandleErr` inside `*Must` constructors; pick `MustBeEmpty` in invariant-asserting helpers. |
+| `RawErrCollection` | struct type | **Accumulator** for batched validation. Embed as a field (e.g. `osdetect/windowsSystemDetailGenerator_windows.go: rawErrCollection errcore.RawErrCollection`) and append errors as you discover them; flush as a single merged error at the end. Use when one operation can produce many independent failures. |
+| `ToError(...)` / `ToString(err error) string` | functions | **Conversion helpers**. `ToString` safely renders an `error` (returns `""` if nil) for log/JSON fields — see `osdetect/vars.go:111`. `ToError` is the inverse for serialised payloads. |
+| `MessageWithRef(name string, ref any) string` | function | Returns a `string` (not an `error`) of the form `"<name> = <ref>"` for embedding inside a parent error's message. Used heavily in `*/vars.go` to attach a reference table to the package-level error template. |
+| `RangeNotMeet(label string, min, max, ranges any) string` | function | Domain-specific range-violation message builder. See `internal/messages/messages.go` for the canonical use. |
 | `VarTwo`, `VarTwoNoType`, `MessageVarMap` | functions | Variable-context formatting |
 | `ErrFunc`, `ErrBytesFunc`, `ErrStringsFunc`, `ErrStringFunc`, `ErrAnyFunc` | type aliases | Common error-returning function signatures |
 
@@ -40,14 +45,23 @@ The `errcore` package is the canonical way to construct errors. It exposes:
 Common categories:
 
 ```go
-errcore.InvalidValueType            // "Invalid : value cannot process it."
-errcore.CannotBeNilOrEmptyType      // "Values or value cannot be nil or null or empty."
-errcore.NotFound                    // "not found"
-errcore.FailedToParseType           // "Failed : request failed to parse!"
-errcore.ValidationFailedType        // "Validation failed!"
-errcore.UnMarshallingFailedType     // "Failed to unmarshal or deserialize."
-errcore.OutOfRangeType              // "Out of range : given value, cannot process it."
+errcore.InvalidValueType                       // "Invalid : value cannot process it."
+errcore.CannotBeNilOrEmptyType                 // "Values or value cannot be nil or null or empty."
+errcore.NotFound                               // "not found"
+errcore.FailedToParseType                      // "Failed : request failed to parse!"
+errcore.ValidationFailedType                   // "Validation failed!"
+errcore.UnMarshallingFailedType                // "Failed to unmarshal or deserialize."
+errcore.OutOfRangeType                         // "Out of range : given value, cannot process it."
+errcore.FailedToConvertType                    // "Failed to convert : input shape cannot be parsed."
+
+// Additional categories exercised by enum-v1 (see audit cycle 2):
+errcore.NotSupportedType                       // "Operation not supported on this variant."
+errcore.PathInvalidErrorType                   // "Path invalid: cannot resolve / open."
+errcore.FailedToExecuteType                    // "Execution failed."
+errcore.ComparatorShouldBeWithinRangeType      // "Comparator value out of allowed range."
 ```
+
+> The full enumeration (80+ values) lives in `errcore/RawErrorType.go` upstream. The list above shows the categories most often used by `enum-v1`; consult the upstream file for the exhaustive set.
 
 ### 1.2 Constructor Methods on `RawErrorType`
 
@@ -59,6 +73,8 @@ errcore.OutOfRangeType              // "Out of range : given value, cannot proce
 | `FmtIf(cond bool, format string, args ...any) error` | conditional | Returns nil if `cond` is false |
 | `MergeError(other error) error` | wrap one | Combines this category with a downstream error |
 | `MergeErrorWithMessage(other error, msg string) error` | wrap + label | Combine with extra context string |
+| `ErrorRefOnly(ref any) error` | value only | When the value itself is the entire context — no field name needed (e.g. `errcore.OutOfRangeType.ErrorRefOnly(badIndex)`). Used heavily by enum constructors and `panic(errcore.NotSupportedType.ErrorRefOnly(it))`-style guards. |
+| `CombineWithAnother(other error) error` | wrap one | Alias of `MergeError` preserved for older call sites (e.g. `errcore.FailedToParseType.CombineWithAnother(downstreamErr)`). New code should prefer `MergeError`. |
 
 ```go
 err := errcore.InvalidValueType.Error("field name", someRef)
@@ -67,12 +83,19 @@ err := errcore.ValidationFailedType.FmtIf(len(name) == 0, "name is required")
 err := errcore.NotFound.ErrorNoRefs("user with id 42")
 err := errcore.FailedToConvertType.MergeError(originalErr)
 err := errcore.FailedToConvertType.MergeErrorWithMessage(originalErr, "while converting X")
+err := errcore.OutOfRangeType.ErrorRefOnly(givenIndex)         // value-only form
+err := errcore.FailedToParseType.CombineWithAnother(parseErr)  // legacy alias
 
 // HandleErr — the canonical panic helper for *Must variants:
 //   func HandleErr(err error)
 //   - if err == nil → no-op
 //   - if err != nil → panics with a stack-enhanced wrapping of err
 errcore.HandleErr(err) // never bare panic(err); see method-writing pattern §*Must
+
+// MustBeEmpty — sister of HandleErr for non-*Must invariant assertions:
+//   func MustBeEmpty(err error)
+//   Same nil-safety. Use inside helpers that genuinely cannot recover.
+errcore.MustBeEmpty(err) // see compressformats/all-validation-checking-err.go
 ```
 
 ### 1.3 Struct-as-Namespace Entry Points
@@ -116,6 +139,61 @@ msg := errcore.MessageVarMap("validation failed", map[string]any{
 ```
 
 These produce **strings**, not errors. Wrap with `errors.New(msg)` or pass to `RawErrorType.Fmt` if you need an error value.
+
+### 1.5 Reference Helpers — `MessageWithRef` and `RangeNotMeet`
+
+Two additional **string** producers cover the common "attach a reference table to a package-level error template" pattern used throughout `*/vars.go`:
+
+```go
+// MessageWithRef(name, ref) → "name = <ref>"  (string, not error)
+mapReferenceMessage := errcore.MessageWithRef(
+    "mapping list",
+    isSetterWithVariantMap)
+// → see onofftype/vars.go:86, promptclitype/vars.go:112
+
+// RangeNotMeet(label, min, max, ranges) → range-violation message
+errMsg := errcore.RangeNotMeet(
+    errcore.ComparatorShouldBeWithinRangeType.String(),
+    corecomparator.Min(),
+    corecomparator.Max(),
+    corecomparator.Ranges())
+// → see internal/messages/messages.go
+```
+
+Use these to build a **package-level constant message** once at init time, then reference it from every constructor / validator that needs the same wording. This keeps error text consistent across all enums in a package.
+
+### 1.6 Accumulating Errors — `RawErrCollection`
+
+When one operation can produce **many independent failures** (e.g. probing several Windows registry keys), use `errcore.RawErrCollection` as a struct field instead of returning early on the first error:
+
+```go
+type windowsSystemDetailGenerator struct {
+    rawErrCollection errcore.RawErrCollection // see osdetect/windowsSystemDetailGenerator_windows.go:16
+    rootRegistryKey  registry.Key
+}
+
+// Append errors as you discover them; flush once at the end.
+g.rawErrCollection.Add(err1)
+g.rawErrCollection.Add(err2)
+finalErr := g.rawErrCollection.ToError() // nil if no errors were appended
+```
+
+`RawErrCollection` follows the same nil-safety rules as the merge functions (§3.2): flushing an empty collection yields `nil`, never a non-nil wrapper around zero errors.
+
+### 1.7 Conversion Helpers — `ToString` and `ToError`
+
+For log/JSON serialisation where a `nil` error must render as an empty value:
+
+```go
+// ToString(err) → "" if err == nil, err.Error() otherwise
+errStr := errcore.ToString(err)            // see osdetect/vars.go:111
+payload.Error = errcore.ToString(err)      // safe to call without a nil check
+
+// ToError(s) — inverse for deserialised payloads
+err := errcore.ToError(payload.Error)      // returns nil if s == ""
+```
+
+Use `ToString` instead of `if err != nil { ... } else { "" }` boilerplate at every JSON boundary.
 
 ---
 
@@ -255,6 +333,15 @@ Use these in parameter lists and struct fields instead of inline function types.
 | Stack-trace-enhanced wrapping | `StackEnhance.Error` / `StackEnhance.Msg` |
 | Two-variable context formatting | `VarTwo` / `VarTwoNoType` |
 | Format a `map[string]any` of variables | `MessageVarMap` |
+| Value-only error (no field name) | `RawErrorType.ErrorRefOnly(ref)` |
+| Legacy alias for `MergeError` | `RawErrorType.CombineWithAnother(err)` (prefer `MergeError` in new code) |
+| Panic-on-error inside a `*Must` constructor | `errcore.HandleErr(err)` |
+| Panic-on-error inside an invariant helper | `errcore.MustBeEmpty(err)` |
+| Build a "name = ref" message fragment | `errcore.MessageWithRef(name, ref)` |
+| Build a range-violation message | `errcore.RangeNotMeet(label, min, max, ranges)` |
+| Accumulate many errors, flush once | `errcore.RawErrCollection` |
+| Render an error to string for JSON / logs | `errcore.ToString(err)` |
+| Parse a string back into an error | `errcore.ToError(s)` |
 
 ---
 
