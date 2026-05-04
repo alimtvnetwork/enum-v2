@@ -23,10 +23,23 @@ function Invoke-CoverageCompileCheck {
     $modeLabel = if ($IsSyncMode) { "sync" } else { "parallel" }
     Write-Host ""; Write-Header "Pre-coverage compile check ($($AllTestPkgs.Count) packages, $modeLabel mode)"
 
+    # Helper: produce a short, ALWAYS-non-empty label for a package path.
+    # Falls back through: trailing creationtests/integratedtests segment →
+    # last path segment → full path → literal "(unknown)". Never returns "(root)"
+    # for non-empty input — that label was masking the real failing import path.
+    function Get-PackageShortName {
+        param([string]$pkg)
+        if (-not $pkg) { return "(unknown)" }
+        $name = $pkg -replace '.*(integratedtests|creationtests)/', ''
+        if ($name -and $name -ne $pkg) { return $name.TrimEnd('/') }
+        $segments = $pkg.TrimEnd('/').Split('/')
+        if ($segments.Count -ge 1 -and $segments[-1]) { return $segments[-1] }
+        return $pkg
+    }
+
     if ($IsSyncMode) {
         foreach ($testPkg in $AllTestPkgs) {
-            $shortName = $testPkg -replace '.*(integratedtests|creationtests)/?', ''
-            if (-not $shortName) { $shortName = "(root)" }
+            $shortName = Get-PackageShortName $testPkg
 
             $prevPref = $ErrorActionPreference
             $ErrorActionPreference = "Continue"
@@ -45,7 +58,7 @@ function Invoke-CoverageCompileCheck {
                 $combinedOut = Merge-UniqueOutputLines $compileOut $diagOut
                 $combinedOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $testPkg -Lines $combinedOut
                 $callerSource = Get-CallerSource
-                Write-Fail "Blocked: $shortName (source: $callerSource)"
+                Write-Fail "Blocked: $shortName  ($testPkg) (source: $callerSource)"
                 $blockedPkgs.Add($shortName)
                 $blockedErrors[$shortName] = ($combinedOut -join "`n")
                 Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $combinedOut
@@ -79,15 +92,14 @@ function Invoke-CoverageCompileCheck {
         }
 
         foreach ($result in ($compileResults | Sort-Object Pkg)) {
-            $shortName = $result.Pkg -replace '.*(integratedtests|creationtests)/?', ''
-            if (-not $shortName) { $shortName = "(root)" }
+            $shortName = Get-PackageShortName $result.Pkg
 
             if ($result.ExitCode -eq 0) {
                 $testPkgs.Add($result.Pkg)
             } else {
                 $diagnosticOut = Resolve-BlockedPackageDiagnosticOutput -PackagePath $result.Pkg -Lines $result.Output
                 $callerSource = "CoverageCompileCheck.psm1 → Invoke-CoverageCompileCheck (parallel)"
-                Write-Fail "Blocked: $shortName (source: $callerSource)"
+                Write-Fail "Blocked: $shortName  ($($result.Pkg)) (source: $callerSource)"
                 $blockedPkgs.Add($shortName)
                 $blockedErrors[$shortName] = ($diagnosticOut -join "`n")
                 Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $diagnosticOut
