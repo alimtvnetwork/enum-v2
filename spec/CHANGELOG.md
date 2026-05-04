@@ -9,6 +9,15 @@
 
 ---
 
+## [spec-v0.25.0] — 2026-05-04 (Cycle 4 baseline — §06 data-structures audited)
+
+### Added
+- **`spec/07-code-vs-spec-audits/05-cycle4-data-structures.md`** — full Cycle 4 audit of `01-app/06-data-structures.md`. 20 claims: 5 ✅ / 6 ⚠️ / **3 ❌** / **6 ❓**. Verifiable score: **35.7 %** (5/14). Three contradictions: `corejson.Serialize.ToString` / `Deserialize.FromTo` examples don't compile (real API: `Serialize.ToBytesErr` / `Deserialize.BytesTo`); `coreonce.New.String(...)` namespace doesn't match real top-level constructors (`coreonce.NewAnyOnce` / `NewByteOnce`); §4's "never `encoding/json` directly" rule is violated by `inttype/Variant.go` (`json.Marshal` in `MarshalJSON`) and `inttype/all-constructors.go` (`*json.Number` parameter type). The high ❓ count (6) reflects that `coregeneric` and `corepayload` have **zero consumers** in `enum-v1`.
+- **9 new drift findings** (C-CVS-06..08 + D-CVS-20..25): documented vs actual `corejson` API, `coreonce` constructor surface, `corestr` real exports (`Hashset` / `SimpleSlice` / `SimpleStringOnce` rather than a string-list collection), and the upstream-only status of `coregeneric` / `corepayload`.
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — added Cycle 4 row, 9 new open findings, 3 new milestones; section progress **4/16**. ❌ contradiction count went 0 → 3 (all on §06).
+
 ## [spec-v0.24.0] — 2026-05-04 (Cycle 3 closed — §05 enum-system at 100 % verifiable)
 
 ### Fixed
