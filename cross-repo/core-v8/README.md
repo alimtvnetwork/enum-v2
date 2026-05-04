@@ -27,9 +27,10 @@ cp <enum-v1>/cross-repo/core-v8/.ci-baselines/golangci-lint.json .ci-baselines/
 
 # Repo metadata
 cp <enum-v1>/cross-repo/core-v8/.golangci.yml .
+cp <enum-v1>/cross-repo/core-v8/.github/dependabot.yml .github/
 
 git add .github scripts/ci .ci-baselines .golangci.yml
-git commit -m "ci: add CI/CD pipeline, vulncheck, release, and guard workflows"
+git commit -m "ci: add CI/CD pipeline, vulncheck, release, guards, and Dependabot"
 git push -u origin ci/initial-pipeline
 ```
 
@@ -46,6 +47,7 @@ described in `enum-v1`'s `spec/04-tooling/05-branch-protection.md`.
 | `ci-guards.yml` | Identical — references shared scripts under `scripts/ci/`. |
 | `.golangci.yml` | Same baseline config; `core-v8` may want to tighten `enabled` linters over time. |
 | `.ci-baselines/golangci-lint.json` | Empty seed — gate runs in warning-only mode until the first `main` push populates the cache. |
+| `.github/dependabot.yml` | Identical — weekly `gomod` + `github-actions` updates, grouped by minor/patch. |
 
 ## Sensitivity / vulnerability scanning
 
