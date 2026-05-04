@@ -110,15 +110,15 @@ is importable **only** by packages under `github.com/alimtvnetwork/core-v9/`. Ex
 | External consumer → any `internal/...` package | ❌ compile error |
 | Test package (`*tests/`) → `internal/...` of the same module | ✅ |
 
-### Common `internal/` packages used by tests
+### `internal/` access from tests
 
-Tests under `tests/integratedtests/` legitimately import `internal/`:
+Test packages that live in **the same module** as an `internal/` package may import it directly. For example, in the upstream `core-v9` repo, tests under its own `tests/` tree can do:
 
 ```go
 import "github.com/alimtvnetwork/core-v9/internal/reflectinternal"
 ```
 
-This works because the test package is rooted in **the same Go module** as the `internal/` package it imports. The rule is generic — it applies whether the module is `core-v9`, `enum-v1`, or any other consumer that ships its own `internal/` tree.
+> **Note (consumer repos like `enum-v1`):** This `internal/` access does **not** cross modules. A consumer (e.g. `enum-v1`) cannot import `core-v9/internal/...` because Go's `internal/` rule is enforced at module boundaries, not just package boundaries. Consumer-side tests should depend only on `core-v9`'s public API. See the upstream `core-v9` repo for examples of in-module `internal/` test imports.
 
 > **Rule**: If you are tempted to add a re-export wrapper "to expose an internal helper", **don't**. Either move the helper to a public package, or accept that external consumers don't need it.
 
@@ -126,12 +126,25 @@ This works because the test package is rooted in **the same Go module** as the `
 
 ## 4. Test-Package Imports (`*tests` Suffix)
 
-Tests for package `foo` live in package `footests` under `tests/integratedtests/footests/`. The test package:
+Test packages live under the repo's `tests/` directory in a sub-folder named after the test suite. In **`enum-v1`**, the layout is:
 
-- Is a **separate Go package** (different package name from the source).
-- Imports the source package as a normal external dependency.
-- Avoids cyclic imports between source and test code.
-- Can import `internal/` packages (it is part of the same module).
+```
+tests/
+└── creationtests/
+    ├── creation_test.go          // package creationtests
+    ├── PathType_Creation_test.go
+    ├── ScriptType_test.go
+    ├── allBasicEnumsCollection.go
+    ├── EnumTestWrapper.go
+    └── …                          // shared fixtures + *_test.go files
+```
+
+In the upstream **`core-v9`** repo, the equivalent layout uses one folder per source package (e.g. `tests/<suite>/footests/` containing `package footests`). Both layouts share the same rules:
+
+- Each test sub-folder is a **separate Go package** (different package name from any source package it tests).
+- It imports the source package(s) under test as normal external dependencies.
+- This avoids cyclic imports between source and test code.
+- It can import `internal/` packages **only if the test sub-folder is in the same module** as those `internal/` packages (see §3).
 
 ### Import pattern in a `*_test.go`
 
