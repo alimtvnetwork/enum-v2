@@ -47,6 +47,7 @@ described in `enum-v1`'s `spec/04-tooling/05-branch-protection.md`.
 | `ci-guards.yml` | Identical — references shared scripts under `scripts/ci/`. |
 | `.golangci.yml` | Same baseline config; `core-v8` may want to tighten `enabled` linters over time. |
 | `.ci-baselines/golangci-lint.json` | Empty seed — gate runs in warning-only mode until the first `main` push populates the cache. |
+| `.github/dependabot.yml` | Identical — weekly `gomod` + `github-actions` updates, grouped by minor/patch. |
 
 ## Sensitivity / vulnerability scanning
 
