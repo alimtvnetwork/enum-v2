@@ -35,8 +35,10 @@ EXCLUDE_DIRS = {".git", "node_modules", "data", "scripts", "src",
                 "public", "spec", "tmp", "vendor", "dist"}
 
 # Top-level Go declaration kinds.
+# NOTE: methods (`func (r Recv) Name`) are intentionally excluded —
+# Go allows the same method name across different receiver types.
 DECL_RE = re.compile(
-    r"^\s*(?:func\s+(?:\([^)]*\)\s+)?(?P<func>[A-Za-z_]\w*)"
+    r"^\s*(?:func\s+(?P<func>[A-Za-z_]\w*)"
     r"|type\s+(?P<type>[A-Za-z_]\w*)"
     r"|var\s+(?P<var>[A-Za-z_]\w*)"
     r"|const\s+(?P<const>[A-Za-z_]\w*))\b"
