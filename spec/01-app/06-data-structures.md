@@ -278,13 +278,15 @@ Use for expensive package-level computations (regex compilation, file reads, net
 
 Located at `coredata/corepayload/`. Wire-format envelope for payload-bearing messages.
 
+> ⚠️ **Upstream-only sub-package** *(audit Cycle 4)*: `corepayload` has **zero consumers in `enum-v1`**. The example below reflects the documented upstream API but cannot be cross-checked against any call site in this repo. Treat it as upstream-reference; the exact field names of `PayloadCreateInstruction` are pending verification under task **AB**.
+
 ```go
 import "github.com/alimtvnetwork/core-v9/coredata/corepayload"
 
 // Empty placeholder
 payload := corepayload.New.PayloadWrapper.Empty()
 
-// From an instruction
+// From an instruction (field set per upstream docs — verify under task AB)
 payload = corepayload.New.PayloadWrapper.UsingInstruction(&corepayload.PayloadCreateInstruction{
     Name:       "user-create",
     Identifier: "usr-123",
@@ -307,20 +309,25 @@ payload = corepayload.New.PayloadWrapper.UsingInstruction(&corepayload.PayloadCr
 
 ## 7. Choosing the Right Container
 
-Decision matrix:
+Decision matrix. ⚠️ marks rows whose target sub-package has no `enum-v1` consumers (see §1 callout) — usable upstream but cannot be verified from this repo.
 
-| Need | Use |
-|---|---|
-| Generic, mutex-protected, slice-backed | `coregeneric.New.Collection.<Type>` |
-| Generic, mutex-protected, set semantics | `coregeneric.New.Hashset.<Type>` |
-| Generic, mutex-protected, key→value | `coregeneric.New.Hashmap.<KV>` |
-| Lightweight slice, no concurrency | `coregeneric.New.SimpleSlice.<Type>` |
-| String-only, legacy code | `corestr.Collection` |
-| Two- or three-tuple return | `coregeneric.New.Pair` / `Triple` |
-| Linked-list semantics (cheap insert) | `coregeneric.New.LinkedList` |
-| Cached lazy value | `coreonce.New.<Type>` |
-| Wire-format envelope | `corepayload.New.PayloadWrapper` |
-| JSON serialize / deserialize | `corejson.Serialize` / `Deserialize` |
+| Need | Use | Verified in `enum-v1`? |
+|---|---|---|
+| Generic, mutex-protected, slice-backed | `coregeneric.New.Collection.<Type>` | ⚠️ upstream-only |
+| Generic, mutex-protected, set semantics | `coregeneric.New.Hashset.<Type>` | ⚠️ upstream-only |
+| Generic, mutex-protected, key→value | `coregeneric.New.Hashmap.<KV>` | ⚠️ upstream-only |
+| Lightweight generic slice, no concurrency | `coregeneric.New.SimpleSlice.<Type>` | ⚠️ upstream-only |
+| String set | `corestr.New.Hashset` | ✅ |
+| Lightweight string slice, no concurrency | `corestr.New.SimpleSlice` | ✅ |
+| Lazy compute-once string | `corestr.SimpleStringOnce` | ✅ |
+| Two- or three-tuple return | `coregeneric.New.Pair` / `Triple` | ⚠️ upstream-only |
+| Linked-list semantics (cheap insert) | `coregeneric.New.LinkedList` | ⚠️ upstream-only |
+| Cached lazy value (any) | `coreonce.NewAnyOnce(producer)` | ✅ |
+| Cached lazy value (byte) | `coreonce.NewByteOnce(producer)` | ✅ |
+| Wire-format envelope | `corepayload.New.PayloadWrapper` | ⚠️ upstream-only |
+| JSON serialize | `corejson.Serialize.ToBytesErr(value)` → `*Result` | ✅ |
+| JSON deserialize | `corejson.Deserialize.BytesTo(bytes, &target)` | ✅ |
+| JSON wrap-and-pretty-print | `corejson.NewPtr(value).PrettyJsonString()` | ✅ |
 
 > Generic-first rule: when both a generic and a string-typed option exist, prefer the generic version unless a string-specific helper is essential.
 
