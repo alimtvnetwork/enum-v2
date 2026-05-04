@@ -174,7 +174,7 @@ function Invoke-TestCoverage {
         $pkgIndex = 0
         foreach ($testPkg in $testPkgs) {
             $pkgIndex++
-            $shortName = $testPkg -replace '.*integratedtests/?', ''; if (-not $shortName) { $shortName = "(root)" }
+            $shortName = $testPkg -replace '.*(integratedtests|creationtests)/?', ''; if (-not $shortName) { $shortName = "(root)" }
             $partialProfile = Join-Path $partialDir "cover-$pkgIndex.out"
             $prevPref = $ErrorActionPreference; $ErrorActionPreference = "Continue"
             $output = & go test -count=1 "-coverprofile=$partialProfile" "-coverpkg=$covPkgList" "$testPkg" 2>&1 | ForEach-Object { $_.ToString() }
@@ -197,7 +197,7 @@ function Invoke-TestCoverage {
             [pscustomobject]@{ Pkg = $pkg; Profile = $profile; ExitCode = $LASTEXITCODE; Output = $out }
         }
         foreach ($result in ($coverResults | Sort-Object Pkg)) {
-            $shortName = $result.Pkg -replace '.*integratedtests/?', ''; if (-not $shortName) { $shortName = "(root)" }
+            $shortName = $result.Pkg -replace '.*(integratedtests|creationtests)/?', ''; if (-not $shortName) { $shortName = "(root)" }
             if ($result.ExitCode -ne 0) {
                 $overallExit = $result.ExitCode
                 Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $result.Output

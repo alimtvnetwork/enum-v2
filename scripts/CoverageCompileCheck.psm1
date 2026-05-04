@@ -25,7 +25,7 @@ function Invoke-CoverageCompileCheck {
 
     if ($IsSyncMode) {
         foreach ($testPkg in $AllTestPkgs) {
-            $shortName = $testPkg -replace '.*integratedtests/?', ''
+            $shortName = $testPkg -replace '.*(integratedtests|creationtests)/?', ''
             if (-not $shortName) { $shortName = "(root)" }
 
             $prevPref = $ErrorActionPreference
@@ -79,7 +79,7 @@ function Invoke-CoverageCompileCheck {
         }
 
         foreach ($result in ($compileResults | Sort-Object Pkg)) {
-            $shortName = $result.Pkg -replace '.*integratedtests/?', ''
+            $shortName = $result.Pkg -replace '.*(integratedtests|creationtests)/?', ''
             if (-not $shortName) { $shortName = "(root)" }
 
             if ($result.ExitCode -eq 0) {
