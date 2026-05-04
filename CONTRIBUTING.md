@@ -71,7 +71,10 @@ All actions are pinned to exact version tags — **never** use `@latest` or `@ma
 
 ## Spec References
 
+- [`spec/04-tooling/00-overview.md`](spec/04-tooling/00-overview.md) — tooling pipeline overview (start here)
 - [`spec/04-tooling/01-ci-pipeline.md`](spec/04-tooling/01-ci-pipeline.md)
 - [`spec/04-tooling/02-release-pipeline.md`](spec/04-tooling/02-release-pipeline.md)
 - [`spec/04-tooling/03-vulnerability-scanning.md`](spec/04-tooling/03-vulnerability-scanning.md)
 - [`spec/04-tooling/04-ci-guards.md`](spec/04-tooling/04-ci-guards.md)
+- [`spec/04-tooling/05-branch-protection.md`](spec/04-tooling/05-branch-protection.md)
+- [`spec/04-tooling/06-cross-repo-sync.md`](spec/04-tooling/06-cross-repo-sync.md)
