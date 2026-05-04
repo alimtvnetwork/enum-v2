@@ -30,6 +30,8 @@
 | [`coreonce`](#5-coreonce--compute-once-values) | Lazy compute-once cached values |
 | [`corepayload`](#6-corepayload--payloadwrapper) | Wire-format payload envelopes |
 
+> ℹ️ **Consumer-coverage note** *(audit Cycle 4)*: from `enum-v1`, only `corejson` (80 files), `corestr` (4 files), and `coreonce` (1 file) are actually imported. `coregeneric` and `corepayload` have **zero `enum-v1` consumers** — they are documented here for upstream `core-v9` completeness, but the API surfaces in §2 and §6 cannot be verified against this repo. Treat those two sub-sections as *upstream-reference* until task **AB** fetches `core-v9` source.
+
 ### Shared rules
 
 1. **Constructors return non-nil values.** An "empty" collection is still a usable receiver — see Zero-Nil Safety in [`02-design-philosophy.md`](./02-design-philosophy.md).
