@@ -18,6 +18,15 @@ Coverage HTML lands at `data/coverage/coverage.html`.
 
 ## Pre-Push Checklist
 
+Before opening a PR, verify each item below. The PR template (`.github/PULL_REQUEST_TEMPLATE.md`) mirrors this list — tick boxes there as you go.
+
+- [ ] `go vet ./...` clean
+- [ ] `golangci-lint run --timeout=5m` clean (or baseline updated — see [`.ci-baselines/README.md`](.ci-baselines/README.md))
+- [ ] `./run.sh tc` (or `./run.ps1 TC`) passes with **≥ 60% coverage**
+- [ ] `python3 scripts/ci/check-collisions.py .` clean
+- [ ] `CHANGELOG.md` `[Unreleased]` updated for user-visible changes
+- [ ] Spec docs updated if behaviour or tooling changed
+
 The CI workflow (`.github/workflows/ci.yml`) enforces these — run them locally first to avoid round-trips:
 
 ```bash
@@ -62,7 +71,10 @@ All actions are pinned to exact version tags — **never** use `@latest` or `@ma
 
 ## Spec References
 
+- [`spec/04-tooling/00-overview.md`](spec/04-tooling/00-overview.md) — tooling pipeline overview (start here)
 - [`spec/04-tooling/01-ci-pipeline.md`](spec/04-tooling/01-ci-pipeline.md)
 - [`spec/04-tooling/02-release-pipeline.md`](spec/04-tooling/02-release-pipeline.md)
 - [`spec/04-tooling/03-vulnerability-scanning.md`](spec/04-tooling/03-vulnerability-scanning.md)
 - [`spec/04-tooling/04-ci-guards.md`](spec/04-tooling/04-ci-guards.md)
+- [`spec/04-tooling/05-branch-protection.md`](spec/04-tooling/05-branch-protection.md)
+- [`spec/04-tooling/06-cross-repo-sync.md`](spec/04-tooling/06-cross-repo-sync.md)
