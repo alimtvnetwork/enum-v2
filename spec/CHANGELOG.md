@@ -9,6 +9,21 @@
 
 ---
 
+## [spec-v0.22.0] — 2026-05-04 (Cycle 2 closed — §04 at 100% verifiable)
+
+### Fixed
+- **`spec/01-app/04-error-system.md`** — resolves D-CVS-06..13 from Cycle 2.
+  - **§1 table**: added rows for `MustBeEmpty`, `RawErrCollection`, `ToError` / `ToString`, `MessageWithRef`, `RangeNotMeet`.
+  - **§1.1**: extended `RawErrorType` examples with `FailedToConvertType`, `NotSupportedType`, `PathInvalidErrorType`, `FailedToExecuteType`, `ComparatorShouldBeWithinRangeType`; added footnote pointing to upstream `errcore/RawErrorType.go` for the exhaustive enumeration.
+  - **§1.2**: added `ErrorRefOnly(ref)` and `CombineWithAnother(other)` constructor rows; expanded code block with examples for both, `MustBeEmpty`, and the comparison vs `HandleErr`.
+  - **New §1.5 "Reference Helpers"**: documents `MessageWithRef` and `RangeNotMeet` with `onofftype/vars.go`, `promptclitype/vars.go`, and `internal/messages/messages.go` references.
+  - **New §1.6 "Accumulating Errors"**: documents `RawErrCollection` accumulator pattern with `osdetect/windowsSystemDetailGenerator_windows.go` reference.
+  - **New §1.7 "Conversion Helpers"**: documents `ToString` / `ToError` with `osdetect/vars.go` reference.
+  - **§7 "When to Use Which API"**: added 9 new rows covering all newly-documented APIs.
+
+### Changed
+- **`spec/07-code-vs-spec-audits/01-scoreboard.md`** — Cycle 2 closed: §04 verifiable score moved 27.3 → **100.0**. All 8 open drift findings (D-CVS-06..13) moved to "Resolved". 7 ❓ remain pending task **AB** (fetch upstream `core-v9` source).
+
 ## [spec-v0.21.0] — 2026-05-04 (Cycle 2 baseline — §04 error-system audited)
 
 ### Added
