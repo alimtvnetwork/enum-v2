@@ -1,10 +1,10 @@
 package creationtests
 
 import (
-	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
-	"github.com/alimtvnetwork/core-v8/enums/stringcompareas"
-	"github.com/alimtvnetwork/core-v8/issetter"
-	"github.com/alimtvnetwork/core-v8/reqtype"
+	"github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v9/enums/stringcompareas"
+	"github.com/alimtvnetwork/core-v9/issetter"
+	"github.com/alimtvnetwork/core-v9/reqtype"
 	"github.com/alimtvnetwork/enum-v1/accesstype"
 	"github.com/alimtvnetwork/enum-v1/brackets"
 	"github.com/alimtvnetwork/enum-v1/cmdenumtypes/compresscmdnames"

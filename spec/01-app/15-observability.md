@@ -44,7 +44,7 @@
 ### 2.1 `VarTwo` — labelled pair with type names
 
 ```go
-import "github.com/alimtvnetwork/core-v8/errcore"
+import "github.com/alimtvnetwork/core-v9/errcore"
 
 err := errcore.VarTwo("userID", uid, "tenantID", tid)
 // → "(userID [t:int64], tenantID [t:string]) = (42, acme-co)"

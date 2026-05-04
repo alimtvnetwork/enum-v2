@@ -1,6 +1,6 @@
 package iptype
 
-import "github.com/alimtvnetwork/core-v8/errcore"
+import "github.com/alimtvnetwork/core-v9/errcore"
 
 func ValidationError(
 	rawString string,

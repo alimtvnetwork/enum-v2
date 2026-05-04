@@ -1,9 +1,9 @@
 package eventtype
 
 import (
-	"github.com/alimtvnetwork/core-v8/coredata/corejson"
-	"github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
-	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v9/coredata/corejson"
+	"github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
+	"github.com/alimtvnetwork/core-v9/errcore"
 )
 
 // Variant

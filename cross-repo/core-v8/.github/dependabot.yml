@@ -6,7 +6,7 @@ version: 2
 updates:
   # ---------------------------------------------------------------------------
   # Go module dependencies. Catches CVEs and upstream version bumps for
-  # github.com/alimtvnetwork/core-v8 and the test toolchain (goconvey, etc.).
+  # github.com/alimtvnetwork/core-v9 and the test toolchain (goconvey, etc.).
   # ---------------------------------------------------------------------------
   - package-ecosystem: gomod
     directory: "/"

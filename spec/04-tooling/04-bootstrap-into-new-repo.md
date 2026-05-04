@@ -70,7 +70,7 @@ After copying, **only the following are project-specific** and need editing. Eve
 
 | Parameter | Where it lives | What to change |
 |---|---|---|
-| **Module path** | `go.mod` (you create this normally) | The toolchain reads it via `go list -m`; nothing in `scripts/` is hard-coded to `github.com/alimtvnetwork/core-v8` |
+| **Module path** | `go.mod` (you create this normally) | The toolchain reads it via `go list -m`; nothing in `scripts/` is hard-coded to `github.com/alimtvnetwork/core-v9` |
 | **Package list for coverage** | Auto-discovered via `go list ./...` | No edit required — works for any module layout |
 | **Coverage threshold** | `.github/workflows/ci.yml` (env block) | Default is `60`. Adjust to your standard |
 | **Lint config** | `.golangci.yml` (project root) | Bring your own; the CI workflow only references it by name |

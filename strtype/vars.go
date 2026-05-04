@@ -3,9 +3,9 @@ package strtype
 import (
 	"sync"
 
-	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
-	"github.com/alimtvnetwork/core-v8/coredata/corejson"
-	"github.com/alimtvnetwork/core-v8/ostype"
+	"github.com/alimtvnetwork/core-v9/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v9/coredata/corejson"
+	"github.com/alimtvnetwork/core-v9/ostype"
 	"github.com/alimtvnetwork/enum-v1/osarchs"
 )
 

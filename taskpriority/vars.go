@@ -1,9 +1,9 @@
 package taskpriority
 
 import (
-	"github.com/alimtvnetwork/core-v8/converters"
-	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v9/converters"
+	"github.com/alimtvnetwork/core-v9/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
 )
 
 var (

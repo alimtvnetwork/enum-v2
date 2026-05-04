@@ -161,7 +161,7 @@ func Test_Foo_Verification(t *testing.T) {
 ```go
 // testWrapper.go
 package anycmptests
-import "github.com/alimtvnetwork/core-v8/tests/testwrappers/stringstestwrapper"
+import "github.com/alimtvnetwork/core-v9/tests/testwrappers/stringstestwrapper"
 type testWrapper = stringstestwrapper.StringsTestWrapper
 
 // testCases.go
@@ -280,7 +280,7 @@ The `coretests.GetAssert` struct exposes:
 
 ### 5.1 Spec-internal contradictions / drift
 
-1. **Module path mismatch**: `spec/00-llm-integration-guide.md` says module is `github.com/alimtvnetwork/core-v8` (line 45-46). Imports in tests confirm. ✅ consistent.
+1. **Module path mismatch**: `spec/00-llm-integration-guide.md` says module is `github.com/alimtvnetwork/core-v9` (line 45-46). Imports in tests confirm. ✅ consistent.
 2. **`spec/03-powershell-test-run/01-overview.md` lines 256-258** point to `/spec/01-app/00-repo-overview.md` and `/spec/01-app/12-cmd-entrypoints.md` — **these files don't exist**. The folder `spec/01-app/` is missing entirely. ❌ broken cross-link.
 3. **`spec/05-failing-tests/02-groupby-empty-map-assertion-mismatch.md`** uses `args.Map{}` for empty expectations — this nuance (string `""` vs `args.Map{}` for "no output") is *not* documented in `03-args-reference.md`. The lesson lives only in the failing-tests folder.
 4. `spec/06-testing-guidelines/06-branch-coverage.md` says "no coverage tests for `internal/` packages" — codebase has e.g. `tests/integratedtests/csvinternaltests/`, `fsinternaltests/`, `jsoninternaltests/`, etc. ⚠️ Either the rule is younger than those packages (legacy) or the rule is being violated. Spec should clarify the historical context.

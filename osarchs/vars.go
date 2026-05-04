@@ -1,8 +1,8 @@
 package osarchs
 
 import (
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-	"github.com/alimtvnetwork/core-v8/osconsts"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v9/osconsts"
 )
 
 var (

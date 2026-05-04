@@ -1,11 +1,11 @@
 package osdetect
 
 import (
-	"github.com/alimtvnetwork/core-v8/codestack"
-	"github.com/alimtvnetwork/core-v8/converters"
-	"github.com/alimtvnetwork/core-v8/coreversion"
-	"github.com/alimtvnetwork/core-v8/errcore"
-	"github.com/alimtvnetwork/core-v8/ostype"
+	"github.com/alimtvnetwork/core-v9/codestack"
+	"github.com/alimtvnetwork/core-v9/converters"
+	"github.com/alimtvnetwork/core-v9/coreversion"
+	"github.com/alimtvnetwork/core-v9/errcore"
+	"github.com/alimtvnetwork/core-v9/ostype"
 	"github.com/alimtvnetwork/enum-v1/inttype"
 	"github.com/alimtvnetwork/enum-v1/osarchs"
 	"github.com/alimtvnetwork/enum-v1/strtype"

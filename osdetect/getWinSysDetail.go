@@ -1,10 +1,10 @@
 package osdetect
 
 import (
-	"github.com/alimtvnetwork/core-v8/coredata/corejson"
-	"github.com/alimtvnetwork/core-v8/errcore"
-	"github.com/alimtvnetwork/core-v8/osconsts"
-	"github.com/alimtvnetwork/core-v8/ostype"
+	"github.com/alimtvnetwork/core-v9/coredata/corejson"
+	"github.com/alimtvnetwork/core-v9/errcore"
+	"github.com/alimtvnetwork/core-v9/osconsts"
+	"github.com/alimtvnetwork/core-v9/ostype"
 )
 
 func getWinSysDetail() (windowsSystemDetailGetter, error) {

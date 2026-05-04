@@ -1,9 +1,9 @@
 package servicestate
 
 import (
-	"github.com/alimtvnetwork/core-v8/coredata/coredynamic"
-	"github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
-	"github.com/alimtvnetwork/core-v8/reqtype"
+	"github.com/alimtvnetwork/core-v9/coredata/coredynamic"
+	"github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
+	"github.com/alimtvnetwork/core-v9/reqtype"
 )
 
 var (

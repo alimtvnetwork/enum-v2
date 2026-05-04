@@ -40,9 +40,9 @@ This is intentional. The module's role is to provide reusable primitives (data s
 
 ```go
 import (
-    "github.com/alimtvnetwork/core-v8/coredata/coregeneric"
-    "github.com/alimtvnetwork/core-v8/conditional"
-    "github.com/alimtvnetwork/core-v8/errcore"
+    "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
+    "github.com/alimtvnetwork/core-v9/conditional"
+    "github.com/alimtvnetwork/core-v9/errcore"
 )
 
 func main() {
@@ -92,8 +92,8 @@ package main
 
 import (
     "os"
-    "github.com/alimtvnetwork/core-v8/coredata/coregeneric"
-    "github.com/alimtvnetwork/core-v8/conditional"
+    "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
+    "github.com/alimtvnetwork/core-v9/conditional"
 )
 
 func main() {

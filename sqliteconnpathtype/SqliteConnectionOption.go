@@ -1,8 +1,8 @@
 package sqliteconnpathtype
 
 import (
-	"github.com/alimtvnetwork/core-v8/coredata/corejson"
-	"github.com/alimtvnetwork/core-v8/coreutils/stringutil"
+	"github.com/alimtvnetwork/core-v9/coredata/corejson"
+	"github.com/alimtvnetwork/core-v9/coreutils/stringutil"
 )
 
 type SqliteConnectionOption struct {

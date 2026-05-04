@@ -1,8 +1,8 @@
 package osdetect
 
 import (
-	"github.com/alimtvnetwork/core-v8/corecsv"
-	"github.com/alimtvnetwork/core-v8/errcore"
+	"github.com/alimtvnetwork/core-v9/corecsv"
+	"github.com/alimtvnetwork/core-v9/errcore"
 )
 
 func CurrentOsTypesNotContainsError(items ...Variant) error {

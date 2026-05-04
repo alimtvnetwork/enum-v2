@@ -27,7 +27,7 @@ Go has no ternary operator and no built-in nil-safe deref. `conditional` fills b
 ### 1.1 Generic Base Functions
 
 ```go
-import "github.com/alimtvnetwork/core-v8/conditional"
+import "github.com/alimtvnetwork/core-v9/conditional"
 
 // Ternary
 result := conditional.If[int](isReady, 200, 500)
@@ -87,7 +87,7 @@ results, err := conditional.TypedErrorFunctionsExecuteResults[string](fn1, fn2)
 Reflection-based predicates over `any` values. Use when you need to make decisions about untyped data — most often inside generic-but-not-typed pipelines (e.g. JSON, dynamic dispatch, test framework).
 
 ```go
-import "github.com/alimtvnetwork/core-v8/isany"
+import "github.com/alimtvnetwork/core-v9/isany"
 
 isany.Null(val)        // true if nil
 isany.Defined(val)     // true if non-nil
@@ -125,7 +125,7 @@ Go's `bool` has only true/false. `issetter.Value` is a `byte`-backed enum with *
 | `Wildcard` (5) | Matches anything (used in test selectors) |
 
 ```go
-import "github.com/alimtvnetwork/core-v8/issetter"
+import "github.com/alimtvnetwork/core-v9/issetter"
 
 status := issetter.True
 status.IsOn()           // true (True or Set)
@@ -148,7 +148,7 @@ status.HasInitialized() // true (any non-Uninitialized state)
 Wraps `regexp.Compile` with `sync.Once` so a regex is compiled at most once across all callers.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/regexnew"
+import "github.com/alimtvnetwork/core-v9/regexnew"
 
 // Package-level (init context — no lock needed)
 var digitRegex = regexnew.New.Lazy(`\d+`)
@@ -183,7 +183,7 @@ Three small packages that fill stdlib gaps with typed, allocation-free helpers.
 ### `coremath`
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coremath"
+import "github.com/alimtvnetwork/core-v9/coremath"
 // Min/Max for byte, int, int16, int32, int64, float32, float64
 ```
 
@@ -192,7 +192,7 @@ Type-specific to avoid the boxing/conversion costs of `math.Max` (which is `floa
 ### `corecmp`
 
 ```go
-import "github.com/alimtvnetwork/core-v8/corecmp"
+import "github.com/alimtvnetwork/core-v9/corecmp"
 // Byte, Integer, Integer8/16/32/64, String, Time
 // Plus pointer variants (e.g. CompareIntegerPtr)
 ```
@@ -202,7 +202,7 @@ Returns `constants.CompareEqual` / `CompareLess` / `CompareGreater` (`0` / `-1` 
 ### `coresort`
 
 ```go
-import "github.com/alimtvnetwork/core-v8/coresort/strsort"
+import "github.com/alimtvnetwork/core-v9/coresort/strsort"
 
 fruits := []string{"banana", "mango", "apple"}
 strsort.Quick(&fruits)    // ascending
@@ -218,7 +218,7 @@ Pointer-receiver mutators — sort in place without taking a copy.
 Reflection-based helpers for working with functions as values. Used heavily by the test framework's diagnostic output.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/corefuncs"
+import "github.com/alimtvnetwork/core-v9/corefuncs"
 
 corefuncs.GetFuncName(fn)        // "MyFunc"
 corefuncs.GetFuncFullName(fn)    // "github.com/.../pkg.MyFunc"
@@ -241,7 +241,7 @@ corefuncs.InOutErrFuncWrapper
 Two simple types: a single `Instance` and a `Collection` of instances.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/namevalue"
+import "github.com/alimtvnetwork/core-v9/namevalue"
 
 inst := namevalue.NewInstance("env", "production")
 inst.Name()       // "env"
@@ -266,7 +266,7 @@ col.ToMap()       // map[string]any{"env": "production", "region": "us-east-1"}
 Template-based key builder with named placeholders. Use for cache keys, audit-log keys, or any structured identifier.
 
 ```go
-import "github.com/alimtvnetwork/core-v8/keymk"
+import "github.com/alimtvnetwork/core-v9/keymk"
 
 // Template: "user/{userID}/post/{postID}"
 key := keymk.New.Compile("user", userID, "post", postID)

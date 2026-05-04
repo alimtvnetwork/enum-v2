@@ -20,21 +20,21 @@
 
 ## 1. Import Path Format
 
-The module path is `github.com/alimtvnetwork/core-v8`. Every public sub-package is reached by appending its directory:
+The module path is `github.com/alimtvnetwork/core-v9`. Every public sub-package is reached by appending its directory:
 
 ```
-github.com/alimtvnetwork/core-v8/<package-path>
+github.com/alimtvnetwork/core-v9/<package-path>
 ```
 
 Examples:
 
 | Package | Import path |
 |---|---|
-| Root | `github.com/alimtvnetwork/core-v8` |
-| `errcore` | `github.com/alimtvnetwork/core-v8/errcore` |
-| `coredata/corejson` | `github.com/alimtvnetwork/core-v8/coredata/corejson` |
-| `coreinterface/enuminf` | `github.com/alimtvnetwork/core-v8/coreinterface/enuminf` |
-| `coreimpl/enumimpl` | `github.com/alimtvnetwork/core-v8/coreimpl/enumimpl` |
+| Root | `github.com/alimtvnetwork/core-v9` |
+| `errcore` | `github.com/alimtvnetwork/core-v9/errcore` |
+| `coredata/corejson` | `github.com/alimtvnetwork/core-v9/coredata/corejson` |
+| `coreinterface/enuminf` | `github.com/alimtvnetwork/core-v9/coreinterface/enuminf` |
+| `coreimpl/enumimpl` | `github.com/alimtvnetwork/core-v9/coreimpl/enumimpl` |
 
 > **Rule**: Always use the **full path**. Do not introduce shortened module aliases at the `go.mod` level.
 
@@ -47,26 +47,26 @@ The canonical import block, copy-paste-ready:
 ```go
 import (
     // Root package (generic factories)
-    "github.com/alimtvnetwork/core-v8"
+    "github.com/alimtvnetwork/core-v9"
 
     // Foundation
-    "github.com/alimtvnetwork/core-v8/conditional"
-    "github.com/alimtvnetwork/core-v8/constants"
-    "github.com/alimtvnetwork/core-v8/converters"
-    "github.com/alimtvnetwork/core-v8/errcore"
+    "github.com/alimtvnetwork/core-v9/conditional"
+    "github.com/alimtvnetwork/core-v9/constants"
+    "github.com/alimtvnetwork/core-v9/converters"
+    "github.com/alimtvnetwork/core-v9/errcore"
 
     // Data structures
-    "github.com/alimtvnetwork/core-v8/coredata/corejson"
-    "github.com/alimtvnetwork/core-v8/coredata/corestr"
-    "github.com/alimtvnetwork/core-v8/coredata/coregeneric"
+    "github.com/alimtvnetwork/core-v9/coredata/corejson"
+    "github.com/alimtvnetwork/core-v9/coredata/corestr"
+    "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
 
     // Interfaces & implementations
-    "github.com/alimtvnetwork/core-v8/coreinterface/enuminf"
-    "github.com/alimtvnetwork/core-v8/coreimpl/enumimpl"
+    "github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
+    "github.com/alimtvnetwork/core-v9/coreimpl/enumimpl"
 
     // Predicates & setters
-    "github.com/alimtvnetwork/core-v8/isany"
-    "github.com/alimtvnetwork/core-v8/issetter"
+    "github.com/alimtvnetwork/core-v9/isany"
+    "github.com/alimtvnetwork/core-v9/issetter"
 )
 ```
 
@@ -77,7 +77,7 @@ For the full inventory of public packages, see [`01-package-map.md`](./01-packag
 The root `core` package contains generic slice/map factories. Import it with the bare path:
 
 ```go
-import "github.com/alimtvnetwork/core-v8"
+import "github.com/alimtvnetwork/core-v9"
 
 func example() {
     s := core.EmptySlice[int]()
@@ -94,10 +94,10 @@ func example() {
 Go's compiler enforces that `internal/` packages can only be imported from packages **rooted at the `internal/` parent**. For `core-v8`, this means:
 
 ```
-github.com/alimtvnetwork/core-v8/internal/...
+github.com/alimtvnetwork/core-v9/internal/...
 ```
 
-is importable **only** by packages under `github.com/alimtvnetwork/core-v8/`. External consumers will get a compile error.
+is importable **only** by packages under `github.com/alimtvnetwork/core-v9/`. External consumers will get a compile error.
 
 ### Rules
 
@@ -115,7 +115,7 @@ is importable **only** by packages under `github.com/alimtvnetwork/core-v8/`. Ex
 Tests under `tests/integratedtests/` legitimately import `internal/`:
 
 ```go
-import "github.com/alimtvnetwork/core-v8/internal/reflectinternal"
+import "github.com/alimtvnetwork/core-v9/internal/reflectinternal"
 ```
 
 This works because the test module is rooted at the same `core-v8` module.
@@ -142,15 +142,15 @@ import (
     "testing"
 
     // Source package under test
-    "github.com/alimtvnetwork/core-v8/errcore"
+    "github.com/alimtvnetwork/core-v9/errcore"
 
     // Test framework
-    "github.com/alimtvnetwork/core-v8/coretests"
-    "github.com/alimtvnetwork/core-v8/coretests/args"
-    "github.com/alimtvnetwork/core-v8/coretests/coretestcases"
+    "github.com/alimtvnetwork/core-v9/coretests"
+    "github.com/alimtvnetwork/core-v9/coretests/args"
+    "github.com/alimtvnetwork/core-v9/coretests/coretestcases"
 
     // Sometimes needed
-    "github.com/alimtvnetwork/core-v8/issetter"
+    "github.com/alimtvnetwork/core-v9/issetter"
 )
 ```
 
@@ -161,8 +161,8 @@ package errcoretests
 
 import (
     // NEVER import "testing" here — testcases files hold pure data
-    "github.com/alimtvnetwork/core-v8/coretests/args"
-    "github.com/alimtvnetwork/core-v8/coretests/coretestcases"
+    "github.com/alimtvnetwork/core-v9/coretests/args"
+    "github.com/alimtvnetwork/core-v9/coretests/coretestcases"
 )
 ```
 
@@ -173,7 +173,7 @@ import (
 Shared wrappers live under `tests/testwrappers/`:
 
 ```go
-import "github.com/alimtvnetwork/core-v8/tests/testwrappers/stringstestwrapper"
+import "github.com/alimtvnetwork/core-v9/tests/testwrappers/stringstestwrapper"
 
 type testWrapper = stringstestwrapper.StringsTestWrapper
 ```
@@ -228,7 +228,7 @@ Do **not** "break the cycle" with `init()` registration tricks — those hide th
 
 | Anti-pattern | Why bad |
 |---|---|
-| `e "github.com/alimtvnetwork/core-v8/errcore"` | Single-letter aliases destroy grep-ability |
+| `e "github.com/alimtvnetwork/core-v9/errcore"` | Single-letter aliases destroy grep-ability |
 | Renaming a package "for taste" | Inconsistent across files breaks IDE navigation |
 | Aliasing to hide a long path | The path encodes the layer; hiding it hides design intent |
 
@@ -251,8 +251,8 @@ import (
     "github.com/some-other-org/some-lib"
 
     // Group 3: This module's packages
-    "github.com/alimtvnetwork/core-v8"
-    "github.com/alimtvnetwork/core-v8/errcore"
+    "github.com/alimtvnetwork/core-v9"
+    "github.com/alimtvnetwork/core-v9/errcore"
 )
 ```
 

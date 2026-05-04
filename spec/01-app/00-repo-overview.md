@@ -9,7 +9,7 @@
 ## 1. Module Identity
 
 ```
-module github.com/alimtvnetwork/core-v8
+module github.com/alimtvnetwork/core-v9
 go 1.25.0
 ```
 
@@ -19,12 +19,12 @@ go 1.25.0
 
 | Property | Value |
 |---|---|
-| Module path | `github.com/alimtvnetwork/core-v8` |
+| Module path | `github.com/alimtvnetwork/core-v9` |
 | Root package name (in code) | **`core`** |
 | Go version | `1.25.0` |
 | Runtime dependencies | **None** (stdlib only) |
 | Test dependencies | `github.com/smarty/assertions`, `github.com/smartystreets/goconvey` |
-| Install | `go get github.com/alimtvnetwork/core-v8` |
+| Install | `go get github.com/alimtvnetwork/core-v9` |
 | License | See repo `LICENSE` |
 
 **Why zero runtime deps?** The library is intended as a foundation for downstream services. A nil dependency footprint means upgrading `core-v8` cannot transitively force upgrades of unrelated packages.
