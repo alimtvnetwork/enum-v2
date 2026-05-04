@@ -322,22 +322,31 @@ Also swap `enumimpl.New.BasicByte` for the matching factory (see next section).
 
 ## 6. Factory Method Reference
 
-Each `enumimpl.New.Basic<Type>` factory exposes the same constructor surface:
+Each `enumimpl.New.Basic<Type>` factory exposes the following constructor surface. The `*AllCases` variants additionally register the slice as the canonical "all cases" list — required by some downstream tooling (test registries, validators).
 
 | Method | Description |
 |---|---|
-| `UsingTypeSlice(typeName, names[])` | Contiguous iota from a string slice (most common) |
-| `Default(firstItem, names[])` | Same, but infers `typeName` via reflection on `firstItem` |
+| `UsingTypeSlice(typeName, names[])` | Contiguous iota from a string slice; type name passed as a literal |
+| `UsingFirstItemSliceAllCases(firstItem, names[])` | Contiguous; engine derives type name from `firstItem` AND registers all-cases slice |
+| `UsingFirstItemSliceAliasMap(firstItem, names[], aliasMap)` | Contiguous + alias map; engine derives type name |
+| `Default(firstItem, names[])` | Contiguous; engine derives type name from `firstItem` |
+| `DefaultAllCases(firstItem, names[])` | **Recommended for the standard recipe** — `Default` + all-cases registration |
 | `DefaultWithAliasMap(firstItem, names[], aliasMap)` | Contiguous + alias name → canonical name lookup |
-| `CreateUsingMap(typeName, map[T]string)` | Non-contiguous — explicit value-to-name pairs |
-| `CreateUsingMapPlusAliasMap(typeName, map[T]string, aliasMap)` | Explicit values + aliases |
+| `DefaultWithAliasMapAllCases(firstItem, names[], aliasMap)` | `DefaultWithAliasMap` + all-cases registration |
+| `CreateUsingMapPlusAliasMap(typeName, map[T]string, aliasMap)` | Sparse / explicit values + aliases |
+| `CreateUsingSlicePlusAliasMapOptions(...)` | Slice form + alias map + extra options |
+| `CreateUsingStringersSpread(...)` | Variadic `fmt.Stringer` form (used when names already exist as enum-stringer values) |
+
+> **Removed from earlier drafts:** `CreateUsingMap(typeName, map[T]string)` is not used anywhere in the codebase and has been dropped from the recommended surface. If you genuinely need sparse value-to-name pairs without aliases, pass an empty alias map to `CreateUsingMapPlusAliasMap`.
 
 ### When to pick which
 
-- **`UsingTypeSlice`** — your enum is contiguous (`iota`-style) and you already have the type name string.
-- **`Default`** — same but you'd rather have the impl reflect-derive `"Status"` from the first value.
-- **`CreateUsingMap`** — sparse / explicit values (e.g. wire-protocol codes like `0x10, 0x20, 0xFF`).
+- **`DefaultAllCases`** — the **default choice** for a new contiguous-iota enum. Engine derives the type name; downstream tooling sees the all-cases slice.
+- **`UsingTypeSlice`** — same as above but you'd rather pass `"Variant"` as a string literal (no reflection on the first item).
+- **`UsingFirstItemSliceAllCases` / `Default`** — variants when you do not need all-cases registration or want a smaller surface.
 - **`*WithAliasMap` / `*PlusAliasMap`** — wire format accepts multiple synonyms (e.g. `"ok"`, `"OK"`, `"success"` all map to `Ready`).
+- **`CreateUsingMapPlusAliasMap`** — sparse / explicit values (e.g. wire-protocol codes like `0x10, 0x20, 0xFF`).
+- **`CreateUsingStringersSpread`** — bridging an existing set of `fmt.Stringer` values into the enum engine.
 
 ---
 
