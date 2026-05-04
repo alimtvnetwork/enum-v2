@@ -54,17 +54,45 @@ function Invoke-TestCoverage {
     $srcPkgs = $allPkgs | Where-Object { $_ -notmatch '/tests/' }
     $covPkgList = $srcPkgs -join ","
 
-    $integrationTestPkgs = go list ./tests/integratedtests/... 2>&1 |
-        ForEach-Object { $_.ToString() } | Where-Object { $_ -and $_ -notmatch '^warning:' }
+    # Discover integration test packages. Historically these lived under
+    # tests/integratedtests/, but this repo (enum-v1) uses tests/creationtests/.
+    # Probe both, and filter out `go list` error/warning lines so we never
+    # feed an empty/garbage package path to the compile checker.
+    $integrationTestPkgs = @()
+    foreach ($testRoot in @('./tests/integratedtests/...', './tests/creationtests/...')) {
+        $rootDir = ($testRoot -replace '/\.\.\.$','') -replace '^\./',''
+        if (-not (Test-Path $rootDir)) { continue }
+        $listed = go list $testRoot 2>&1 | ForEach-Object { $_.ToString() } |
+            Where-Object {
+                $_ -and
+                $_ -notmatch '^warning:' -and
+                $_ -notmatch '^(go: |matched no packages|no Go files)' -and
+                $_ -match '^[a-zA-Z0-9_.\-/]+$'
+            }
+        if ($listed) { $integrationTestPkgs += $listed }
+    }
+
+    # Determine import-path prefix for this module (e.g. enum-v1, core-v9, …)
+    # so the in-package-test scan is not hard-coded to one repo.
+    $modulePath = (Select-String -Path 'go.mod' -Pattern '^module\s+(\S+)' -ErrorAction SilentlyContinue |
+        Select-Object -First 1).Matches[0].Groups[1].Value
+    if (-not $modulePath) { $modulePath = 'github.com/alimtvnetwork/enum-v1' }
+    $modulePrefix = "^$([regex]::Escape($modulePath))/"
 
     $inPkgTestPkgs = @()
     foreach ($srcPkg in $srcPkgs) {
-        $relPath = $srcPkg -replace '^github\.com/alimtvnetwork/core-v9/', ''
+        $relPath = $srcPkg -replace $modulePrefix, ''
         if ($relPath -and (Test-Path $relPath) -and (Get-ChildItem -Path $relPath -Filter '*_test.go' -File -ErrorAction SilentlyContinue)) {
             $inPkgTestPkgs += $srcPkg
         }
     }
-    $allTestPkgs = @($integrationTestPkgs) + @($inPkgTestPkgs) | Sort-Object -Unique
+    $allTestPkgs = @(@($integrationTestPkgs) + @($inPkgTestPkgs) |
+        Where-Object { $_ -and $_.Trim() } | Sort-Object -Unique)
+
+    if ($allTestPkgs.Count -eq 0) {
+        Write-Host "  ✗ No test packages discovered under ./tests/ or alongside source files." -ForegroundColor Red
+        exit 1
+    }
 
     # ── Pre-checks ──
     $preCheckOk = Invoke-CoveragePreChecks -ScriptRoot $global:ProjectRoot -ExtraArgs $ExtraArgs -CoverDir $coverDir
@@ -146,7 +174,7 @@ function Invoke-TestCoverage {
         $pkgIndex = 0
         foreach ($testPkg in $testPkgs) {
             $pkgIndex++
-            $shortName = $testPkg -replace '.*integratedtests/?', ''; if (-not $shortName) { $shortName = "(root)" }
+            $shortName = $testPkg -replace '.*(integratedtests|creationtests)/?', ''; if (-not $shortName) { $shortName = "(root)" }
             $partialProfile = Join-Path $partialDir "cover-$pkgIndex.out"
             $prevPref = $ErrorActionPreference; $ErrorActionPreference = "Continue"
             $output = & go test -count=1 "-coverprofile=$partialProfile" "-coverpkg=$covPkgList" "$testPkg" 2>&1 | ForEach-Object { $_.ToString() }
@@ -169,7 +197,7 @@ function Invoke-TestCoverage {
             [pscustomobject]@{ Pkg = $pkg; Profile = $profile; ExitCode = $LASTEXITCODE; Output = $out }
         }
         foreach ($result in ($coverResults | Sort-Object Pkg)) {
-            $shortName = $result.Pkg -replace '.*integratedtests/?', ''; if (-not $shortName) { $shortName = "(root)" }
+            $shortName = $result.Pkg -replace '.*(integratedtests|creationtests)/?', ''; if (-not $shortName) { $shortName = "(root)" }
             if ($result.ExitCode -ne 0) {
                 $overallExit = $result.ExitCode
                 Add-BuildErrorsForPackage $buildErrorsByPackage $shortName $result.Output
