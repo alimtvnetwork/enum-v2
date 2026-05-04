@@ -30,6 +30,8 @@
 | [`coreonce`](#5-coreonce--compute-once-values) | Lazy compute-once cached values |
 | [`corepayload`](#6-corepayload--payloadwrapper) | Wire-format payload envelopes |
 
+> ℹ️ **Consumer-coverage note** *(audit Cycle 4)*: from `enum-v1`, only `corejson` (80 files), `corestr` (4 files), and `coreonce` (1 file) are actually imported. `coregeneric` and `corepayload` have **zero `enum-v1` consumers** — they are documented here for upstream `core-v9` completeness, but the API surfaces in §2 and §6 cannot be verified against this repo. Treat those two sub-sections as *upstream-reference* until task **AB** fetches `core-v9` source.
+
 ### Shared rules
 
 1. **Constructors return non-nil values.** An "empty" collection is still a usable receiver — see Zero-Nil Safety in [`02-design-philosophy.md`](./02-design-philosophy.md).
@@ -42,6 +44,8 @@
 ## 2. `coregeneric` — Generic Containers
 
 Located at `coredata/coregeneric/`. Generic-first, built on Go 1.18+ type parameters.
+
+> ⚠️ **Upstream-only sub-package** *(audit Cycle 4)*: `coregeneric` has **zero consumers in `enum-v1`**. The API tables below reflect upstream `core-v9` documentation but cannot be cross-checked against any call site in this repo. Treat as upstream-reference until task **AB** verifies against `core-v9` source.
 
 ### 2.1 `Collection[T any]`
 
@@ -171,25 +175,33 @@ Lower-volume containers; same construction pattern via `coregeneric.New.LinkedLi
 
 ## 3. `corestr` — String Collections
 
-Located at `coredata/corestr/`. String-typed collection with batteries included for the most common case: a thread-safe list of strings.
+Located at `coredata/corestr/`. The exported surface actually consumed from `enum-v1` is three string-typed helpers (audit Cycle 4):
+
+| Type / constructor | Purpose | Example call site |
+|---|---|---|
+| `corestr.New.Hashset` | String set with O(1) membership | `New.Hashset.Empty()` / `New.Hashset.UsingItems("a", "b")` |
+| `corestr.New.SimpleSlice` | Lightweight string slice (no mutex) | `New.SimpleSlice.Cap(8)` |
+| `corestr.SimpleSlice` | Same type used directly as a parameter | `func(ss *corestr.SimpleSlice)` signatures |
+| `corestr.SimpleStringOnce` | Lazy compute-once string value | package-level cached labels |
 
 ```go
 import "github.com/alimtvnetwork/core-v9/coredata/corestr"
 
-collection := corestr.NewCollectionPtrUsingStrings(&values, 0)
-collection.AddsLock("new item")
-fmt.Println(collection.Length())
+// String set
+seen := corestr.New.Hashset.Empty()
+seen.Add("alpha")
+exists := seen.Contains("alpha")
+
+// Lightweight string slice (no mutex)
+lines := corestr.New.SimpleSlice.Cap(8)
+lines.Append("first line")
+
+// Lazy-cached string
+label := corestr.SimpleStringOnce{Producer: func() string { return expensiveLabel() }}
+fmt.Println(label.Value())
 ```
 
-When to prefer `corestr.Collection` over `coregeneric.Collection[string]`:
-
-| Reason | `corestr` | `coregeneric` |
-|---|---|---|
-| Need string-specific helpers (joining, sorting) | ✅ | ❌ |
-| Need to interoperate with `coregeneric` generic helpers | ❌ | ✅ |
-| Default for new code | ⚪ | ✅ — generic-first is the framework standard |
-
-> The framework historically used `corestr` heavily; new code should prefer `coregeneric.New.Collection.String` for consistency.
+> **Note (audit Cycle 4):** earlier drafts of this spec showed `corestr.NewCollectionPtrUsingStrings(&values, 0)` as the canonical entry point. That constructor is **not used anywhere in `enum-v1`**, and a thread-safe "string list collection" is not part of the consumer-side surface today. If you need a string list with mutex-protected mutation, use `coregeneric.New.Collection.String` (upstream-only — see §1 callout) or — for the lock-free case — `corestr.New.SimpleSlice`.
 
 ---
 
@@ -200,46 +212,67 @@ Located at `coredata/corejson/`. The single canonical entry point for JSON in th
 ```go
 import "github.com/alimtvnetwork/core-v9/coredata/corejson"
 
-// Serialize
-jsonStr,   err := corejson.Serialize.ToString(myStruct)
-jsonBytes, err := corejson.Serialize.Raw(myStruct)
+// Serialize → returns *corejson.Result (a non-nil wrapper carrying the bytes + error)
+result, err := corejson.Serialize.ToBytesErr(myStruct)
+if err != nil { return err }
+jsonBytes := result.Bytes()
 
-// Deserialize
-err := corejson.Deserialize.UsingBytes(jsonBytes, &target)
-err := corejson.Deserialize.FromTo(source, &target)  // deep copy via JSON
+// Deserialize from bytes into a target value
+err = corejson.Deserialize.BytesTo(jsonBytes, &target)
 
-// Pretty print
-pretty := corejson.NewPtr(myStruct).PrettyJsonString()
+// Wrap an existing value for downstream JSON contracts
+js := corejson.NewPtr(myStruct)        // *Result
+pretty := js.PrettyJsonString()        // pretty-printed string
+
+// Implementing the JSON contracts in your own type
+type MyType struct{ ... }
+func (it MyType) JsonPtr() *corejson.Result { return corejson.New(it) }
+// satisfies corejson.Jsoner / JsonMarshaller / JsonContractsBinder
 ```
 
 ### Why `corejson` and not `encoding/json`?
 
 1. **Consistent error categories** — wraps stdlib errors in `errcore.UnMarshallingFailedType` / `FailedToConvertType` so log scanners can attribute failures.
-2. **`FromTo` deep-copy** — common pattern (serialize then deserialize into another shape) is one call instead of two.
-3. **Pretty-printing baked in** — no manual `json.MarshalIndent` formatting.
+2. **Result-wrapper ergonomics** — `*Result` carries the bytes, the original error, and helpers like `PrettyJsonString()` so downstream code doesn't re-marshal.
+3. **Contract interfaces** — `corejson.Jsoner`, `JsonMarshaller`, `JsonContractsBinder` let consumers accept "anything JSON-able" without committing to a concrete type.
 
-### Rule
+### Rule (with documented exceptions)
 
-Any package that touches JSON should import `corejson` and **never** `encoding/json` directly.
+Any package that touches JSON **should** import `corejson` rather than `encoding/json` directly. Two **legitimate exceptions** apply (audit Cycle 4 — these are the only direct `encoding/json` imports in `enum-v1`):
+
+| File | Use of `encoding/json` | Why it's allowed |
+|---|---|---|
+| `inttype/Variant.go` | `json.Marshal(it.Value())` inside `MarshalJSON` | The receiver IS the JSON marshaller; delegating its primitive value to `json.Marshal` is the canonical Go pattern and `corejson` would call the same code with extra wrapping. |
+| `inttype/all-constructors.go` | `*json.Number` as a parameter type in `NewUsingJsonNumber(jsonNumber *json.Number)` | `json.Number` is a stdlib value type with no `corejson` equivalent; consumer code that already holds one should be able to pass it through. |
+
+Outside of these two patterns (a `MarshalJSON` body emitting a primitive, or a `*json.Number` parameter), prefer `corejson`.
 
 ---
 
 ## 5. `coreonce` — Compute-Once Values
 
-Located at `coredata/coreonce/`. Lazy-evaluated cached values for all common types — read-modify-once semantics built on `sync.Once`.
+Located at `coredata/coreonce/`. Lazy-evaluated cached values built on `sync.Once`. The exported surface used from `enum-v1` is a small set of typed top-level constructors (audit Cycle 4):
+
+| Constructor | Cached value type | Use case |
+|---|---|---|
+| `coreonce.NewAnyOnce(producer func() any)` | `any` | Heterogeneous cached value (struct, pointer, etc.) |
+| `coreonce.NewByteOnce(producer func() byte)` | `byte` | Numeric scalar cache |
 
 ```go
 import "github.com/alimtvnetwork/core-v9/coredata/coreonce"
 
-// Construct with the producer
-once := coreonce.New.String(func() string { return expensiveCall() })
+// Generic any-typed cache
+cfg := coreonce.NewAnyOnce(func() any { return loadConfig() })
+v := cfg.Value()           // first call runs the producer
+v = cfg.Value()            // later calls return cached
 
-// First Value() call invokes the producer; later calls return cached
-v := once.Value()
-v = once.Value()  // no recompute
+// Byte-typed cache
+firstByte := coreonce.NewByteOnce(func() byte { return readMagicByte() })
 ```
 
 Use for expensive package-level computations (regex compilation, file reads, network handshakes) that should run at most once.
+
+> **Note (audit Cycle 4):** earlier drafts described a uniform `coreonce.New.<Type>(...)` namespace covering "all common types". The actual consumer-side surface is the two top-level functions above. Additional typed wrappers may exist upstream in `core-v9` (e.g. `corestr.SimpleStringOnce` is the string equivalent and lives in `corestr` rather than `coreonce`); pending task **AB** to enumerate the full upstream listing.
 
 ---
 
@@ -247,13 +280,15 @@ Use for expensive package-level computations (regex compilation, file reads, net
 
 Located at `coredata/corepayload/`. Wire-format envelope for payload-bearing messages.
 
+> ⚠️ **Upstream-only sub-package** *(audit Cycle 4)*: `corepayload` has **zero consumers in `enum-v1`**. The example below reflects the documented upstream API but cannot be cross-checked against any call site in this repo. Treat it as upstream-reference; the exact field names of `PayloadCreateInstruction` are pending verification under task **AB**.
+
 ```go
 import "github.com/alimtvnetwork/core-v9/coredata/corepayload"
 
 // Empty placeholder
 payload := corepayload.New.PayloadWrapper.Empty()
 
-// From an instruction
+// From an instruction (field set per upstream docs — verify under task AB)
 payload = corepayload.New.PayloadWrapper.UsingInstruction(&corepayload.PayloadCreateInstruction{
     Name:       "user-create",
     Identifier: "usr-123",
@@ -276,20 +311,25 @@ payload = corepayload.New.PayloadWrapper.UsingInstruction(&corepayload.PayloadCr
 
 ## 7. Choosing the Right Container
 
-Decision matrix:
+Decision matrix. ⚠️ marks rows whose target sub-package has no `enum-v1` consumers (see §1 callout) — usable upstream but cannot be verified from this repo.
 
-| Need | Use |
-|---|---|
-| Generic, mutex-protected, slice-backed | `coregeneric.New.Collection.<Type>` |
-| Generic, mutex-protected, set semantics | `coregeneric.New.Hashset.<Type>` |
-| Generic, mutex-protected, key→value | `coregeneric.New.Hashmap.<KV>` |
-| Lightweight slice, no concurrency | `coregeneric.New.SimpleSlice.<Type>` |
-| String-only, legacy code | `corestr.Collection` |
-| Two- or three-tuple return | `coregeneric.New.Pair` / `Triple` |
-| Linked-list semantics (cheap insert) | `coregeneric.New.LinkedList` |
-| Cached lazy value | `coreonce.New.<Type>` |
-| Wire-format envelope | `corepayload.New.PayloadWrapper` |
-| JSON serialize / deserialize | `corejson.Serialize` / `Deserialize` |
+| Need | Use | Verified in `enum-v1`? |
+|---|---|---|
+| Generic, mutex-protected, slice-backed | `coregeneric.New.Collection.<Type>` | ⚠️ upstream-only |
+| Generic, mutex-protected, set semantics | `coregeneric.New.Hashset.<Type>` | ⚠️ upstream-only |
+| Generic, mutex-protected, key→value | `coregeneric.New.Hashmap.<KV>` | ⚠️ upstream-only |
+| Lightweight generic slice, no concurrency | `coregeneric.New.SimpleSlice.<Type>` | ⚠️ upstream-only |
+| String set | `corestr.New.Hashset` | ✅ |
+| Lightweight string slice, no concurrency | `corestr.New.SimpleSlice` | ✅ |
+| Lazy compute-once string | `corestr.SimpleStringOnce` | ✅ |
+| Two- or three-tuple return | `coregeneric.New.Pair` / `Triple` | ⚠️ upstream-only |
+| Linked-list semantics (cheap insert) | `coregeneric.New.LinkedList` | ⚠️ upstream-only |
+| Cached lazy value (any) | `coreonce.NewAnyOnce(producer)` | ✅ |
+| Cached lazy value (byte) | `coreonce.NewByteOnce(producer)` | ✅ |
+| Wire-format envelope | `corepayload.New.PayloadWrapper` | ⚠️ upstream-only |
+| JSON serialize | `corejson.Serialize.ToBytesErr(value)` → `*Result` | ✅ |
+| JSON deserialize | `corejson.Deserialize.BytesTo(bytes, &target)` | ✅ |
+| JSON wrap-and-pretty-print | `corejson.NewPtr(value).PrettyJsonString()` | ✅ |
 
 > Generic-first rule: when both a generic and a string-typed option exist, prefer the generic version unless a string-specific helper is essential.
 
