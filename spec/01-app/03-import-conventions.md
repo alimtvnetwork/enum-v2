@@ -58,7 +58,7 @@ import (
     // Data structures
     "github.com/alimtvnetwork/core-v9/coredata/corejson"
     "github.com/alimtvnetwork/core-v9/coredata/corestr"
-    "github.com/alimtvnetwork/core-v9/coredata/coregeneric"
+    "github.com/alimtvnetwork/core-v9/coredata/coregeneric" // optional — not every consumer needs this
 
     // Interfaces & implementations
     "github.com/alimtvnetwork/core-v9/coreinterface/enuminf"
