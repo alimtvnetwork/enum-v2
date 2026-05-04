@@ -52,6 +52,15 @@ _None._ All 4 audited sections (§03, §04, §05, §06) are at 100 % of their ve
 | D-CVS-17 | §8 referenced nonexistent `tests/integratedtests/<pkg>tests/` | 2026-05-04 | `spec/01-app/05-enum-system.md` §8 | Rewrote to point at `tests/creationtests/` shared registry (mirrors C-CVS-01 fix from §03) |
 | D-CVS-18 | `reflectinternal.TypeName(Invalid)` example unrunnable | 2026-05-04 | `spec/01-app/05-enum-system.md` §4.3 | Replaced with `DefaultAllCases` / `UsingTypeSlice` patterns |
 | D-CVS-19 | Predicate file-split rule (>6 OR >20 lines) never enforced | 2026-05-04 | `spec/01-app/05-enum-system.md` §4.5 | Softened to guideline matching `pathpatterntype` reality |
+| C-CVS-06 | §4 "never `encoding/json` directly" rule violated by `inttype` | 2026-05-04 | `spec/01-app/06-data-structures.md` §4 "Rule (with documented exceptions)" | Documented the two legitimate exceptions: `MarshalJSON` → `json.Marshal` for primitive emission; `*json.Number` parameter type |
+| C-CVS-07 | `corejson.Serialize.ToString` / `Serialize.Raw` example didn't compile | 2026-05-04 | `spec/01-app/06-data-structures.md` §4 code block | Replaced with the actually-used `Serialize.ToBytesErr` / `Deserialize.BytesTo` + `*Result` wrapper |
+| C-CVS-08 | `corepayload.New.PayloadWrapper.UsingInstruction(...)` example unverifiable | 2026-05-04 | `spec/01-app/06-data-structures.md` §6 | Added explicit "upstream-only" callout deferring field-set verification to task **AB** |
+| D-CVS-20 | `corejson.Serialize.ToString` / `Raw` listed but never called | 2026-05-04 | `spec/01-app/06-data-structures.md` §4 | Replaced with `Serialize.ToBytesErr(...) → *Result` |
+| D-CVS-21 | `corejson.Deserialize.UsingBytes` / `FromTo` listed but never called | 2026-05-04 | `spec/01-app/06-data-structures.md` §4 | Replaced with `Deserialize.BytesTo(bytes, &target)` |
+| D-CVS-22 | `coreonce.New.String(producer)` namespace doesn't match real top-level constructors | 2026-05-04 | `spec/01-app/06-data-structures.md` §5 | Rewrote §5 around `coreonce.NewAnyOnce` / `NewByteOnce` |
+| D-CVS-23 | `corestr` shown as "thread-safe list of strings"; real surface is `Hashset`/`SimpleSlice`/`SimpleStringOnce` | 2026-05-04 | `spec/01-app/06-data-structures.md` §3 | Rewrote §3 around `New.Hashset` / `New.SimpleSlice` / `SimpleStringOnce` |
+| D-CVS-24 | `coreonce` "covers all common types" overstated | 2026-05-04 | `spec/01-app/06-data-structures.md` §5 | Softened to "common typed wrappers"; cross-referenced `corestr.SimpleStringOnce` |
+| D-CVS-25 | `coregeneric` and `corepayload` presented as first-class but have no `enum-v1` consumers | 2026-05-04 | `spec/01-app/06-data-structures.md` §1, §2, §6 + §7 decision matrix | Added "Consumer-coverage note" in §1 + ⚠️ "upstream-only" callouts in §2 and §6; §7 matrix now marks each row with `enum-v1` verification status |
 
 ## Targets
 
@@ -65,8 +74,8 @@ _None._ All 4 audited sections (§03, §04, §05, §06) are at 100 % of their ve
 | ✅ Cycle 3 baseline on §05 | **47.1** verifiable on §05 | 2026-05-04 |
 | ✅ Resolve §05 contradictions C-CVS-03..05 (HIGH) + apply D-CVS-14..19 | **100.0** verifiable on §05 | 2026-05-04 |
 | ✅ Cycle 4 baseline on §06 | **35.7** verifiable on §06 | 2026-05-04 |
-| 🚧 Resolve §06 contradictions C-CVS-06..08 + apply D-CVS-20..25 | target 100 % on §06 | pending (next task **AE**) |
+| ✅ Resolve §06 contradictions C-CVS-06..08 + apply D-CVS-20..25 | **100.0** verifiable on §06 | 2026-05-04 |
 | 🚧 Fetch `core-v9` source (task **AB**) → resolve 7 ❓ on §04 + 1 ❓ on §05 + 6 ❓ on §06 | — | pending |
 | 🚧 Audit all 16 sections of `01-app/` | 16/16 | **4/16 done** |
-| 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ❌ on §06 (35.7) |
-| 🎯 Zero ❌ contradictions | 0 (currently **3** on §06) | ❌ |
+| 🎯 Reach ≥95 % aggregate match rate | ≥ 95 | ✅ (verifiable subset) |
+| 🎯 Zero ❌ contradictions | 0 | ✅ |
