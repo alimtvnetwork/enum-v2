@@ -30,12 +30,28 @@ GitHub Release body — keep entries small, sectioned, and human-readable.
   - `scripts/ci/lint-baseline-diff.py` — lint gate that fails only on
     **new** `golangci-lint` findings; baseline cached per `main` push and
     seeded from `.ci-baselines/golangci-lint.json` on cold cache.
-- **Spec docs**: `spec/04-tooling/02-release-pipeline.md`,
-  `03-vulnerability-scanning.md`, `04-ci-guards.md`.
+- **Spec docs**: `spec/04-tooling/00-overview.md` (tooling index/landing
+  page), `02-release-pipeline.md`, `03-vulnerability-scanning.md`,
+  `04-bootstrap-into-new-repo.md`, `04-ci-guards.md`,
+  `05-branch-protection.md`, `06-cross-repo-sync.md`.
 - **`CONTRIBUTING.md`** — local dev (`./run.sh`), commit conventions,
   release procedure.
-- `.golangci.yml`, `CODEOWNERS`, `.github/PULL_REQUEST_TEMPLATE.md`,
+- `.golangci.yml`, `CODEOWNERS`, `.github/PULL_REQUEST_TEMPLATE.md`
+  (now with structured local / CI-guard / cross-repo checklists),
   `.gitattributes`.
+- **Dependabot** (`.github/dependabot.yml`) — weekly `gomod` and
+  `github-actions` updates, grouped minor/patch PRs, scheduled Mondays
+  09:00 Asia/Kuala_Lumpur.
+- **Cross-repo staging** under `cross-repo/core-v8/` — mirrored
+  workflows, `.golangci.yml`, `dependabot.yml`, baselines, and a
+  README install guide so the `core-v8` upstream can adopt the same
+  CI surface (governed by `spec/04-tooling/06-cross-repo-sync.md`).
+- **Python regression tests** for the CI guards:
+  `scripts/ci/test_check_collisions.py` (22 cases covering build-tag
+  collapsing, accessor pairs, decl parsing, string/comment skipping,
+  per-package scoping) and `scripts/ci/test_lint_baseline_diff.py`
+  (15 cases covering load/identity rules, seeding mode, gate mode,
+  exit codes, summary counts).
 
 ### Changed
 - Module path migrated from `gitlab.com/auk-go/enum` to
