@@ -45,14 +45,23 @@ The `errcore` package is the canonical way to construct errors. It exposes:
 Common categories:
 
 ```go
-errcore.InvalidValueType            // "Invalid : value cannot process it."
-errcore.CannotBeNilOrEmptyType      // "Values or value cannot be nil or null or empty."
-errcore.NotFound                    // "not found"
-errcore.FailedToParseType           // "Failed : request failed to parse!"
-errcore.ValidationFailedType        // "Validation failed!"
-errcore.UnMarshallingFailedType     // "Failed to unmarshal or deserialize."
-errcore.OutOfRangeType              // "Out of range : given value, cannot process it."
+errcore.InvalidValueType                       // "Invalid : value cannot process it."
+errcore.CannotBeNilOrEmptyType                 // "Values or value cannot be nil or null or empty."
+errcore.NotFound                               // "not found"
+errcore.FailedToParseType                      // "Failed : request failed to parse!"
+errcore.ValidationFailedType                   // "Validation failed!"
+errcore.UnMarshallingFailedType                // "Failed to unmarshal or deserialize."
+errcore.OutOfRangeType                         // "Out of range : given value, cannot process it."
+errcore.FailedToConvertType                    // "Failed to convert : input shape cannot be parsed."
+
+// Additional categories exercised by enum-v1 (see audit cycle 2):
+errcore.NotSupportedType                       // "Operation not supported on this variant."
+errcore.PathInvalidErrorType                   // "Path invalid: cannot resolve / open."
+errcore.FailedToExecuteType                    // "Execution failed."
+errcore.ComparatorShouldBeWithinRangeType      // "Comparator value out of allowed range."
 ```
+
+> The full enumeration (80+ values) lives in `errcore/RawErrorType.go` upstream. The list above shows the categories most often used by `enum-v1`; consult the upstream file for the exhaustive set.
 
 ### 1.2 Constructor Methods on `RawErrorType`
 
