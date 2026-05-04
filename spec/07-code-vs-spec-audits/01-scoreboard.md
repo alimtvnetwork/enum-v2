@@ -38,7 +38,7 @@
 |-----------|-------|--------|
 | ✅ First measured baseline (Cycle 1) | **41.7** | 2026-05-04 |
 | ✅ Apply 5 LOW spec fixes from Cycle 1 (D-CVS-01..05) | **83.3** on §03 | 2026-05-04 |
-| 🚧 Resolve C-CVS-01 + C-CVS-02 → §03 at 100% | 100% on §03 | Pending |
-| 🎯 Audit all 16 sections of `01-app/` | 16/16 | 1/16 done |
+| ✅ Resolve C-CVS-01 + C-CVS-02 → §03 at 100% | **100.0** on §03 | 2026-05-04 |
+| 🚧 Audit all 16 sections of `01-app/` | 16/16 | 1/16 done |
 | 🎯 Reach ≥95% aggregate match rate | ≥ 95 | Pending |
-| 🎯 Zero ❌ contradictions | 0 (currently 2) | Pending |
+| 🎯 Zero ❌ contradictions | 0 (currently 0) | ✅ |
