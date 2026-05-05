@@ -64,6 +64,7 @@ _None._ All 5 audited-and-closed sections (§03, §04, §05, §06, §08) are at 
 | D-CVS-23 | `corestr` shown as "thread-safe list of strings"; real surface is `Hashset`/`SimpleSlice`/`SimpleStringOnce` | 2026-05-04 | `spec/01-app/06-data-structures.md` §3 | Rewrote §3 around `New.Hashset` / `New.SimpleSlice` / `SimpleStringOnce` |
 | D-CVS-24 | `coreonce` "covers all common types" overstated | 2026-05-04 | `spec/01-app/06-data-structures.md` §5 | Softened to "common typed wrappers"; cross-referenced `corestr.SimpleStringOnce` |
 | D-CVS-25 | `coregeneric` and `corepayload` presented as first-class but have no `enum-v2` consumers | 2026-05-04 | `spec/01-app/06-data-structures.md` §1, §2, §6 + §7 decision matrix | Added "Consumer-coverage note" in §1 + ⚠️ "upstream-only" callouts in §2 and §6; §7 matrix now marks each row with `enum-v2` verification status |
+| D-CVS-26 | §08 §6 references nonexistent `tests/integratedtests/<pkg>tests/` for validator tests | 2026-05-05 | `spec/01-app/08-validators.md` §6 line 347 | Rewrote to `tests/creationtests/<pkg>tests/` + cross-ref to C-CVS-01 / D-CVS-17 (mirrors the §03 / §05 fixes) |
 
 ## Targets
 
